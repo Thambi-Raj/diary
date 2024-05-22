@@ -1,0 +1,16 @@
+get_font_tag(element,span){
+    while (element && element.tagName != 'FONT') {
+        if (element.tagName == 'B') {
+            span.style.fontWeight = "bold";
+        }
+        if (element.tagName == 'U') {
+            span.style.textDecorationLine = "underline";
+        }
+        if (element.tagName == 'I') {
+            span.style.fontStyle = "italic";
+        }
+
+        element = element.parentElement;
+    }
+    return element;
+},

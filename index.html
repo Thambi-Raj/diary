@@ -1,0 +1,130 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <link rel="stylesheet" href="style.css">
+    <link rel="stylesheet"
+        href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@20..48,100..700,0..1,-50..200" />
+    <style>
+        #word-pad>div{
+            width:max-content;
+        
+    }
+</style>
+    </head>
+
+<body onload="a()">
+    <div id="root">
+        <div id="header">
+            <div id="left_pane">
+                <span id="icon">DIARY</span>
+            </div>
+        </div>
+        <div id="content">
+            <div id="left-container">
+                <div id="calendar-side-bar">
+
+                    <div class="section clicked">
+                        <div id="section-head">
+                            <span class="material-symbols-outlined">
+                                clinical_notes
+                            </span>
+                            <span>2024</span>
+                            <span class="material-symbols-outlined drop_down">
+                                arrow_drop_down
+                            </span>
+
+                        </div>
+                        <div id="section-body">
+                            <div class="month ">Jan</div>
+                            <div class="month">Feb</div>
+                            <div class="month">Mar</div>
+                            <div class="month">Apr</div>
+                            <div class="month">May</div>
+                            <div class="month">Jun</div>
+                            <div class="month">Jul</div>
+                            <div class="month clicked">Aug</div>
+                            <div class="month">Sep</div>
+                            <div class="month">Oct</div>
+                            <div class="month">Nov</div>
+                            <div class="month ">Dec</div>
+                        </div>
+
+                    </div>
+                    <div class="section">
+                        <div id="section-head">
+                            <span class="material-symbols-outlined">
+                                clinical_notes
+                            </span>
+                            <span>2023</span>
+                            <span class="material-symbols-outlined drop_down">
+                                arrow_drop_down
+                            </span>
+                        </div>
+                    </div>
+                    <div class="section">
+                        <div id="section-head">
+                            <span class="material-symbols-outlined ">
+                                favorite
+                            </span>
+                            <span>Favorites</span>
+                            <span class="material-symbols-outlined  drop_down">
+                                arrow_drop_down
+                            </span>
+                        </div>
+                    </div>
+                    <div class="section">
+                        <div id="section-head">
+                            <span class="material-symbols-outlined">
+                                bookmark
+                            </span>
+                            <span>Bookmarks</span>
+                            <span class="material-symbols-outlined drop_down">
+                                arrow_drop_down
+                            </span>
+                        </div>
+                    </div>
+                    <div class="section">
+                        <div id="section-head">
+                            <span class="material-symbols-outlined">
+                                alternate_email
+                            </span>
+                            <span>Mentions</span>
+                            <span class="material-symbols-outlined drop_down">
+                                arrow_drop_down
+                            </span>
+                        </div>
+                        <div id="section-body">
+                            <span class="material-symbols-outlined search-icon">
+                                search
+                            </span>
+                            <input type="text" placeholder="search">
+                        </div>
+                    </div>
+
+                </div>
+            </div>
+            <div id="right-container">
+     
+            </div>
+
+        </div>
+    </div>
+</body>
+<style>
+    .none {
+        display: none;
+    }
+</style>
+<script defer src="calendar_view1.js"></script>
+<script>
+function a(){
+document.getElementById('word-pad').addEventListener('keydown',(e)=>{
+    
+})
+}
+</script>
+</html>

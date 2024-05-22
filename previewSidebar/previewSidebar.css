@@ -1,0 +1,110 @@
+.content-sidebar{
+    width: 100%;
+    height: 100%;
+}
+.content-sidebar>#head{
+    width: 100%;
+    display: flex;
+    justify-content: space-around;
+    align-items: center;
+    padding:.7vw;
+    height: 3vw;
+}
+.content-sidebar>#head>span{
+    cursor: pointer;
+    font-size: 1.2vw;
+    text-align: center;
+    padding: .4vw;
+   transform: rotate(180deg);    
+}
+.content-sidebar>#head>span:hover{
+    background-color: #ffffff30;
+    border-radius: 50%;
+
+}
+.content-sidebar>#head>.drop-down-root{
+    width: 35%;
+    position: relative;
+}
+.content-sidebar>#head>.drop-down-root:hover{
+    color: #fff;
+    border-radius: 5px;
+}
+.content-sidebar>#head>.drop-down-root>.sidebar-dropdown{
+    width: 100% !important;
+    border: none;
+}
+.content-sidebar>#head>.drop-down-root>#option{
+    color :#aeb6b9;
+    background-color: #1A222B;
+    width: 100%;
+    border-radius: 3px;
+    border-top: none;
+    border-left:none   
+}
+.content-sidebar>#head>.drop-down-root>#option>.clicked{
+     background-color: #3e3e4657 !important;
+     color: #fff;
+}
+.content-sidebar>#head>.drop-down-root>#option>span:hover{
+    background-color: #3e3e4657;
+    color: #fff;
+
+}
+.content-sidebar>#head>#drop-down>#drop-down-head{
+    display: flex;
+    align-items: center;
+    position: relative;
+    height: 1.5vw;
+    cursor: pointer;
+    padding-left: .5vw;
+}
+.content-sidebar>#head>#drop-down>#drop-down-head>.material-symbols-outlined{
+    position:absolute;
+    right: 0;
+}
+
+.content-sidebar>#head>#drop-down>#option>span{
+height: 1.5vw;
+display: flex;
+align-items: center;
+cursor: pointer;
+
+}
+.content-sidebar>#head>#drop-down>#option>span:hover{
+    background-color: #34414f;
+}
+.content-sidebar>#body{
+    overflow: scroll;
+    scrollbar-width: none;
+    height: calc(100% - 2vw);
+    padding-bottom: 1vw;
+    width: 100%;
+    overflow-x: hidden;
+}
+.content-sidebar>#body>#day-container{
+    height: 9vw;
+    width: 100%;
+    padding: 1vw;
+    cursor: pointer;
+    background-color: #1A222B;
+    transition: .1s ease-in-out;
+    position: relative;
+}
+.content-sidebar>#body>.active{
+    background-color: #606060de !important;
+    transform: scale(1.1);
+    transition: .1s ease-in-out;
+}
+.content-sidebar>#body>.active:hover{
+   transform: scale(1.1) !important;
+}
+.content-sidebar>#body>#day-container:hover{
+    background-color: #3e3e46de;
+    transform: scale(1.05);
+}
+.content-sidebar>#body>#day-container>img{
+    width: 50%;
+    height: 50%;
+    position: absolute;
+}

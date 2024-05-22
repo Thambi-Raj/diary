@@ -1,0 +1,58 @@
+#search-dropdown_root>#search-dd-head{
+ color: #bcbcbc;
+ display: flex;
+ align-items: center;
+ position: relative;
+ height: 2.5vw;
+ padding-left: 0.7vw;
+ cursor: pointer;
+}
+#search-dropdown_root>#search-dd-head >.material-symbols-outlined:first-child{
+    width: 15%;
+    font-size: 1vw;
+    margin-top: 0.1vw;
+}
+#search-dropdown_root>#search-dd-head:hover {
+    background-color: #1A222B;
+}
+#search-dropdown_root>#search-dd-body{
+padding-top: 0.5vw;
+padding-bottom: 0.5vw;
+background-color: #1A222B;
+}
+#search-dropdown_root>#search-dd-body>.search-icon{
+position: absolute;
+    font-size: 1vw;
+    margin-top: 0.37vw;
+    margin-left: 0.85vw;
+}
+#search-dropdown_root>#search-dd-body>input{
+    height: 1.5vw;
+    border-radius: 5px;
+    font-size: .75vw;
+    padding: 0.8vw;
+    padding-left: 1.5vw;
+    border: none;
+    outline: none;
+    color: #fff;
+    background-color: #0000003d;
+    margin-left: 0.7vw;
+    width: calc(100% - 1vw);
+}
+#search-dropdown_root>#search-dd-body>.item{
+    height: 2vw;
+    display: flex;
+    padding-left: 1.7vw;
+    align-items: center;
+    cursor: pointer;
+}
+#search-dropdown_root>#search-dd-body>.item:hover{
+    background-color: #3e3e4657;
+}
+#search-dropdown_root>#search-dd-head>.material-symbols-outlined:last-child{
+position: absolute;
+right: 7%;
+}
+#search-dropdown_root>.hide{
+display: none;
+}
