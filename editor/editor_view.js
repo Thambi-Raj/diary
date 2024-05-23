@@ -1,34 +1,48 @@
 const editor_component = {
     template: `<div class="editor-root" ref="editor_width" :class="{ preview: preview_class !== '' }">
-                 <div id="editor-tool" ref="editor_tool" v-if="preview">
-                   <div :class="{ 'button clicked': active_state.bold, 'button': !active_state.bold }" id="bold" @click="change_text_format('bold')">
-                   <span class="material-symbols-outlined">format_bold</span>
-                   </div>
-                   <div :class="{ 'button clicked': active_state.italic, 'button': !active_state.italic }" id="italic" @click="change_text_format('italic')">
-                   <span class="material-symbols-outlined">format_italic</span>
-                   </div>
-                   <div :class="{ 'button clicked': active_state.underline, 'button': !active_state.underline }" id="underline" @click="change_text_format('underline')">
-                   <span class="material-symbols-outlined">format_underlined</span>
-                   </div>
-                   <div class="file" >
-                   <input  type="file" id="imag" accept="image/*" @change="insert_photo" ref="image_file" >
-                   <label for="imag" id="upload">Upload&nbsp;&nbsp;<span class="material-symbols-outlined">image</span> </label>
-                   
-                   </div>
-                   <div class="file">
-                   <label for="Color">Color &nbsp;&nbsp;</label>
-                   <input type="color" id="Color" @change="change_text_format($event.target.value, 'forecolor', 'font')" :value="active_state.color" ref="color_input">
-                   </div>
-                   <simple-dropdown-controller width="font_size_width" :default_val="active_state['font-size']" :data="font_size" :name="'FontSize'" :tag="'-'" @change_format="change_text_format"></simple-dropdown-controller>
-                   <simple-dropdown-controller width="normal_width":default_val="active_state['font-family']" :data="font_family" :name="'FontName'" :tag="'-'" @change_format="change_text_format"></simple-dropdown-controller>
-                   <simple-dropdown-controller width="small_width" :default_val="active_state['align']" :data="align" :name="'align'" :tag="'span'" @change_format="change_text_format"></simple-dropdown-controller>
-                   <simple-dropdown-controller width="small_width" :default_val="back_ground" :data="texture" :name="'background'" :tag="'image'" @change_background="change_background"></simple-dropdown-controller>
-                
-                   </div> 
-                   <div id="texture-field" ref="back_ground"> 
-                      <div id="heading">
-                      </div>
-                      <div id="content">  
+                <div id="header"  v-if="preview">
+                     <div id="left">
+                         <div id="back">
+                            
+                                  <span id="back-icon" class="material-symbols-outlined">
+                                         arrow_back
+                                  </span>
+                         </div>
+                        <div id="editor-tool" ref="editor_tool" >
+                                <div :class="{ 'button clicked': active_state.bold, 'button': !active_state.bold }" id="bold" @click="change_text_format('bold')">
+                                <span class="material-symbols-outlined">format_bold</span>
+                            </div>
+                            <div :class="{ 'button clicked': active_state.italic, 'button': !active_state.italic }" id="italic" @click="change_text_format('italic')">
+                                <span class="material-symbols-outlined">format_italic</span>
+                            </div>
+                            <div :class="{ 'button clicked': active_state.underline, 'button': !active_state.underline }" id="underline" @click="change_text_format('underline')">
+                                <span class="material-symbols-outlined">format_underlined</span>
+                            </div>
+                            <div class="file" >
+                                <input  type="file" id="imag" accept="image/*" @change="insert_photo" ref="image_file" >
+                                <label for="imag" id="upload">Upload&nbsp;&nbsp;<span class="material-symbols-outlined">image</span> </label>
+                            </div>
+                            <div class="file">
+                                <label for="Color">Color &nbsp;&nbsp;</label>
+                                <input type="color" id="Color" @change="change_text_format($event.target.value, 'forecolor', 'font')" :value="active_state.color" ref="color_input">
+                            </div>
+                                <simple-dropdown-controller width="font_size_width" :default_val="active_state['font-size']" :data="font_size" :name="'FontSize'" :tag="'-'" @change_format="change_text_format"></simple-dropdown-controller>
+                            <simple-dropdown-controller width="normal_width":default_val="active_state['font-family']" :data="font_family" :name="'FontName'" :tag="'-'" @change_format="change_text_format"></simple-dropdown-controller>
+                            <simple-dropdown-controller width="small_width" :default_val="active_state['align']" :data="align" :name="'align'" :tag="'span'" @change_format="change_text_format"></simple-dropdown-controller>
+                            <simple-dropdown-controller width="small_width" :default_val="back_ground" :data="texture" :name="'background'" :tag="'image'" @change_background="change_background"></simple-dropdown-controller>
+                            
+                            </div> 
+                </div>
+                <div id="right"> 
+                 <div id="date">
+                   <span>Wed</span>
+                 </div>
+                 <div id="month">
+                  <span>{{month}}&nbsp;{{date}} ,&nbsp;{{year}}</span>
+                 </div>
+                </div>
+              </div>
+                <div id="texture-field" ref="back_ground">
                          <div id="word-pad" contenteditable="true" ref="content" spellcheck="false" 
                             @click="editor_click_event" 
                             @keydown="editor_keydown_event" 
@@ -49,9 +63,8 @@ const editor_component = {
                                 <span ref="delete_icon" class="material-symbols-outlined" @click="image_click($event.currentTarget,index)">delete</span>
                             </div>
                         </div>
-                    </div>
-                 </div>   
-                 <div id="full_container_photo" :class=image_full_view_class  @click="close_container" ref="full_container">
+                </div>   
+                <div id="full_container_photo" :class=image_full_view_class  @click="close_container" ref="full_container">
                      <div id="image_con"  ref="show_photo">
                             <div>
                                <img src="" ref="full_img">
@@ -72,7 +85,7 @@ const editor_component = {
                 'italic': false,
                 'underline': false,
                 'font-size': '15px',
-                'color': '#666666',
+                'color': '#444',
                 'font-family': 'sans-serif',
                 'formatBlock': 'normal',
                 'align': 'format_align_left',
@@ -110,12 +123,15 @@ const editor_component = {
         preview: {
             type: Boolean
         },
-        default_date: {
-            type: Number,
-        },
         date:{
             type:[Number,String]
         },
+        year:{
+            type:Number
+        },
+        month:{
+            type:String
+        }
     },
     mounted() {
         this.check_for_draft();

@@ -8,160 +8,241 @@
     font-size: .75vw !important;
     color: #666 !important;
 }
-
-.editor-root>#editor-tool {
-    width: 55%;
+.editor-root>#header{
+    width: 90%;
+    height: 3vw;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    background-color: #e6e6e6;
+    border-radius: 0.3vw 0.3vw 0 0;
+}
+.editor-root>#header>#left{
+    width: 75%;
+    height: 100%;
+    display: flex;
+}
+.editor-root>#header>#left>#back{
+    width: max-content;
+    height: 100%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 0vw 0.8vw;
+    cursor: pointer;
+    border-right: 1px solid #c0baba59;
+}
+.editor-root>#header>#left>#back:hover{
+    background-color: #dddddd;
+    border-radius: .3vw 0vw 0vw 0 ;
+}
+.editor-root>#header>#left>#back:hover>#back-icon{
+    transform: scale(1);
+    color:#666;
+}
+.editor-root>#header>#left>#back>#back-icon{
+    font-size: 1.2vw;
+    margin-top: .1vw;
+    width: 100%;
+    height: 100%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    color: #828282;
+     transform: scale(0.9);
+     transition: .1s ease-in-out;
+}
+.editor-root>#header>#date{
+    width: 25%;
+    height: 2.5vw;
+}
+.editor-root>#header>#left>#editor-tool {
+    width:60%;  
     display: flex;
     justify-content: space-between;
-    height: 2vw;
+    align-items: center;
+    height: 3vw;
+    padding: 0vw 0.5vw;
+    background-color: #e6e6e6;
 }
-.editor-root>#editor-tool>.button {
-    padding: .4vw;
+.editor-root>#header>#left>#editor-tool>.button {
+    padding: 0.3vw;
     display: flex;
     align-items: center;
     cursor: pointer;
     border-radius: 5px;
-    height: 2vw;
-    border:1px solid #c9c9c96e;
+    height: 1.5vw;
+    border: 1px solid transparent;
     color: #666;
     transition: .1s ease-in-out;
 }
-.editor-root>#editor-tool>.button:hover{
+.editor-root>#header>#left>#editor-tool>.button:hover{
     background-color:#e0e0e0 ;
 }
-.editor-root>#editor-tool>.button > .fa-heart{
+.editor-root>#header>#left>#editor-tool>.button > .fa-heart{
     font-size: 1vw;
     color:rgb(231, 92, 92) !important;
 }
-.editor-root>#editor-tool>.button >.fa-heart-o{
+.editor-root>#header>#left>#editor-tool>.button >.fa-heart-o{
     font-size: 1vw;
-   color: #666 !important;
+    color: #666 !important;
 }
-.editor-root>#editor-tool>.button>span{
-    font-size: 1.2vw;
+.editor-root>#header>#left>#editor-tool>.button>span{
+    font-size: .8vw;
+    margin-top: 0.1vw;
 }
-.editor-root>#editor-tool>.button>.hide{
+.editor-root>#header>#left>#editor-tool>.button>.hide{
     display: none;
 }
-.editor-root>#editor-tool>.button>.marked{
+.editor-root>#header>#left>#editor-tool>.button>.marked{
     background-color: #b0a664;
 }
 
-.editor-root>#editor-tool>.clicked {
+.editor-root>#header>#left>#editor-tool>.clicked {
 
     border: 1.5px solid #c9c9c9;
     box-shadow: rgba(88, 92, 94, 0.3) 0px 1px 2px 0px, rgba(60, 64, 67, 0.15) 0px 1px 3px 1px;
 }
-.editor-root>#editor-tool>.file{
+.editor-root>#header>#left>#editor-tool>.file{
     display: flex;
     align-items: center;
     width: max-content;
     justify-content: space-evenly;
-    border: 1px solid #c9c9c96e;;
+    border: 1px solid #c9c9c96e;
     border-radius: 5px;
     position: relative;
     cursor: pointer;
     padding: .4vw;
+    height: 1.5vw;
     transition: .1s ease-in-out;
+    font-size: 0.6vw;
 }
-.editor-root>#editor-tool>.file:hover{
+.editor-root>#header>#left>#editor-tool>.file:hover{
     background-color:#e0e0e0 ; 
 }
-.editor-root>#editor-tool>.file:hover>input{
+.editor-root>#header>#left>#editor-tool>.file:hover>input{
     background-color: #e0e0e0;
 }
-.editor-root>#editor-tool>.drop-down-root>#drop-down-head:hover{
+.editor-root>#header>#left>#editor-tool>.drop-down-root>#drop-down-head:hover{
     background-color:#e0e0e0 ;  
 } 
-.editor-root>#editor-tool>.extra_width{
+.editor-root>#header>#left>#editor-tool>.extra_width{
     width: 6vw !important;
 }
-.editor-root>#editor-tool>.extra_width>.material-symbols-outlined{
+.editor-root>#header>#left>#editor-tool>.extra_width>.material-symbols-outlined{
     font-size: 1vw;
     color: #666;
 }
-.editor-root>#editor-tool>.file>label{
+.editor-root>#header>#left>#editor-tool>.file>label{
     cursor: pointer;
 }
-.editor-root>#editor-tool>.file>#imag{
+.editor-root>#header>#left>#editor-tool>.file>#imag{
     display: none;
 }
-.editor-root>#editor-tool>.file>#Color{
-    width: 1vw;
-    height: 1.2vw;
+.editor-root>#header>#left>#editor-tool>.file>#Color{
+    width: 0.8vw;
+    height: 1vw;
     outline: none;
     border: none;
+    background-color: #e6e6e600;
 }
-.editor-root>#editor-tool>.file>#Color:hover{
+.editor-root>#header>#left>#editor-tool>.file>#Color:hover{
     background-color:#e0e0e0 ; 
 }
-.editor-root>#editor-tool>.small-drop-down{
+.editor-root>#header>#left>#editor-tool>.small-drop-down{
      width:2.7vw !important;
      border: 1px solid #c9c9c9;
-   
      border-radius: 5px;
      position: relative;
      display: flex;
     align-items: center;
     height: 2vw;
 } 
+.editor-root>#header>#right{
+    display: flex;
+    flex-direction: column;
+    width: max-content;
+    height: 80%;
+    padding: 0vw 1vw;
+}
+ .editor-root>#header>#right>#date{
+    height: 50%;
+    display: flex;
+    font-size: 1vw;
+    align-items: center;
+    font-weight: bold;
+    
+} .editor-root>#header>#right>#month{
+
+ height: 50%;
+    display: flex;
+    font-size: .7vw;
+    align-items: center;
+}
+/* .editor-root>#header>#right>#date>span{
+    font-size: 1.5vw;
+
+}
+
+.editor-root>#header>#right>#month{
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+}   */
 .editor-root>#texture-field {
-    height: calc(100% - 4vw);
+    height: calc(100% - 3vw);
     width: 90%;
-    border-radius: 10px;
+    border-radius:0px 0px 10px 10px;
     background-image: url(texture31.webp);
     background-repeat: no-repeat;
     background-size: cover;
     display: flex;
-    flex-direction: column;
+    position: relative;
 }
-.editor-root>#texture-field>#heading{
-    width: 100%;
-    height: 10%;
-    background-color: #e8bebeab;
-}
-.editor-root>#texture-field>#content{
-    width: 100%;
-    height: 90%;
-    display: flex;
-}
-.editor-root>#texture-field>#content>#word-pad::-webkit-scrollbar {
+
+.editor-root>#texture-field>#word-pad::-webkit-scrollbar {
     width: .2vw;
     height: .2vh;
 }
 
-.editor-root>#texture-field>#content>#word-pad::-webkit-scrollbar-track {
+.editor-root>#texture-field>#word-pad::-webkit-scrollbar-track {
     background: #e8bebeab;
 }
 
-.editor-root>#texture-field>#content>#word-pad::-webkit-scrollbar-thumb {
+.editor-root>#texture-field>#word-pad::-webkit-scrollbar-thumb {
     background-color: #d5d2d2;
     border-radius: 5px;
 
 }
-.editor-root>#texture-field>#content>#word-pad{
+.editor-root>.hide{
+    display: none;
+}   
+
+.editor-root>#texture-field>#word-pad{
 background-color: #e8bebeab;
 height: 100%;
 width: 78.3%;
 outline: none;
-border-radius: 5px;
+border-radius: 0px 0px 0px 5px;;
 font-size: 15px;
 font-family: sans-serif;
-color: #666;
+color: #444;
 overflow: auto;
 overflow-x: hidden;
+padding: 1vw 0vw;
 line-height: 2vw;
 }
-.editor-root>#texture-field>#content>#word-pad>.line-content{
+.editor-root>#texture-field>#word-pad>.line-content{
     padding:0vw 1vw;
     width: 100%;
     min-height: 2vw;
     max-height:max-content ;
 }
-.editor-root>#texture-field>#content>.full-width{
+.editor-root>#texture-field>.full-width{
     width: 100% !important;
+    border-radius:0px 0px 5px 5px !important;
 }
-.editor-root>#texture-field>#content>#drag_container{
+.editor-root>#texture-field>#drag_container{
     cursor: col-resize;
     display: flex;
     align-items: center;
@@ -169,10 +250,10 @@ line-height: 2vw;
     background-color: #fff;
     transition: .1s ease-in-out;
 }
-.editor-root>#texture-field>#content>#drag_container:hover{
+.editor-root>#texture-field>#drag_container:hover{
     background-color: #dadada;
 }
-.editor-root>#texture-field>#content>.image_container{
+.editor-root>#texture-field>.image_container{
     height: 100%;
     width: 21%;
     overflow: auto;
@@ -181,35 +262,37 @@ line-height: 2vw;
     align-items: center;
     flex-direction: column ;
     direction: rtl;
+    border-radius: 0px 0px 5px 0px;
+
 }
 #right-container-root>.hide{
     display: none;
 }
-.editor-root>#texture-field>#content>.hide{
+.editor-root>#texture-field>.hide{
     display: none !important;
 }
-.editor-root>#texture-field>#content>.image_container::-webkit-scrollbar {
+.editor-root>#texture-field>.image_container::-webkit-scrollbar {
     width: .2vw;
     height: .2vh;
 }
 
-.editor-root>#texture-field>#content>.image_container::-webkit-scrollbar-track {
+.editor-root>#texture-field>.image_container::-webkit-scrollbar-track {
     background: #e8bebeab;
 }
 
-.editor-root>#texture-field>#content>.image_container::-webkit-scrollbar-thumb {
+.editor-root>#texture-field>.image_container::-webkit-scrollbar-thumb {
     background-color: #d5d2d2;
     border-radius: 5px;
 
 }
-.editor-root>#texture-field>#content>.image_container>div{
+.editor-root>#texture-field>.image_container>div{
      padding: 1vw;
      width: 100%;
      height: 21vh;
      position: relative;
      cursor: pointer;
 }
-.editor-root>#texture-field>#content>.image_container>div>span{
+.editor-root>#texture-field>.image_container>div>span{
     position: absolute;
     top: 1.2vw;
     right: 1.2vw;
@@ -231,15 +314,15 @@ line-height: 2vw;
         opacity: 1;
     }
 }
-.editor-root>#texture-field>#content>.image_container>div>.show{
+.editor-root>#texture-field>.image_container>div>.show{
     display: block;
     animation: .5s show_delete_icon;
     transition: .2s ease-in-out;
 }
-.editor-root>#texture-field>#content>.image_container>div>.show:hover{
+.editor-root>#texture-field>.image_container>div>.show:hover{
     font-size: .9vw;
 }
-.editor-root>#texture-field>#content>.image_container>div>img{
+.editor-root>#texture-field>.image_container>div>img{
     width: 100% ;
     height : 100% ;
     border-radius: 5px;
@@ -262,7 +345,7 @@ line-height: 2vw;
     flex-direction: column;
     align-items: center;
     justify-content: center;
-    z-index: 1;
+    z-index: 2;
 }
 .editor-root>.hide{
     display:none !important;
@@ -328,5 +411,6 @@ line-height: 2vw;
     justify-content: center;
 }
 #upload>span{
-    font-size: 1.2vw;
+    font-size: 1vw;
+    margin-top: .1vw;
 }

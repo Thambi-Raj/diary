@@ -7,6 +7,8 @@ const editor_controller = {
                 :preview="preview"
                 :date="date"
                 :height=height
+                :year="year"
+                :month="month"
                 @save_content="save_content"
                 @add_fav="add_fav"
                 > 
@@ -22,6 +24,12 @@ const editor_controller = {
         date:{
             type:[Number,String]
         },
+        year:{
+            type:Number
+        },
+        month:{
+            type:String
+        }
     },
     watch:{
         data(){

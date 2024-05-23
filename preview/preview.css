@@ -47,6 +47,8 @@
     height: 1vw;
     width: 1vw; 
     transition: .05s ease-in-out;
+    z-index: 1;
+
 }
 .preview-root>#content>#second>img{
     width: 40%;
@@ -76,43 +78,40 @@
     height: 100% !important;
     width: 100% !important;
 }
-.preview-root>#content>#second>#editor>.preview>#texture-field>#heading{
-    display: none !important;
+.preview-root>#content>#second>#editor>.preview>#texture-field>#back{
+    display: none  !important;
 }
-.preview-root>#content>#second>#editor>.preview>#texture-field>#content{
-    height: 100%;
-}
-.preview-root>#content>#second>#editor>.preview>#texture-field>#content>#drag_container{
+.preview-root>#content>#second>#editor>.preview>#texture-field>#drag_container{
     display: none;
     background-color: #fff;
 }
-.preview-root>#content>#second>#editor>.preview>#texture-field>#content>#word-pad{
+.preview-root>#content>#second>#editor>.preview>#texture-field>#word-pad{
     font-size: .45vw !important;
     line-height: .8vw !important;
     width: 100% !important;
     overflow: hidden !important;
     padding:  .5vw !important;
 }
-.preview-root>#content>#second>#editor>.preview>#texture-field>#content>#word-pad span{
+.preview-root>#content>#second>#editor>.preview>#texture-field>#word-pad span{
     font-size: .45vw !important;
 }
-.preview-root>#content>#second>#editor>.preview>#texture-field>#content>#drag_container>span{
+.preview-root>#content>#second>#editor>.preview>#texture-field>#drag_container>span{
     display: none;
 }
-.preview-root>#content>#second>#editor>.preview>#texture-field>#content>#drag_container{
+.preview-root>#content>#second>#editor>.preview>#texture-field>#drag_container{
     display: none !important;
 }
-.preview-root>#content>#second>#editor>.preview>#texture-field>#content>#imageContainer{
+.preview-root>#content>#second>#editor>.preview>#texture-field>#imageContainer{
     display: none !important;
 }
-.preview-root>#content>#second>#editor>.preview>#texture-field>#content>#word-pad>.line-content{
+.preview-root>#content>#second>#editor>.preview>#texture-field>#word-pad>.line-content{
     opacity: 1;
     padding: 0vw !important;
     height: min-content !important;
     min-height: min-content !important;
 
 }
-.preview-root>#content>#second>#editor>.preview>#texture-field>#content>#word-pad>.line-content b{
+.preview-root>#content>#second>#editor>.preview>#texture-field>#word-pad>.line-content b{
     opacity: .7;
 }
 .preview-root>.full_width>#second>.hide{

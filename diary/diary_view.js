@@ -31,6 +31,8 @@ const diary_component = {
         <editor-controller v-if= "right_template === 'editor'"  
                 :data="default_date_data" 
                 :date="default_date"
+                :month="dropdown_value"
+                :year="dropdown_selected"
                 @save_json_content="save_json"
                 :preview="true">
         </editor-controller>

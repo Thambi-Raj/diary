@@ -14,7 +14,7 @@ const preview_component={
                 </i>
                 </div>
                 <div id="editor" :class="{ 'hide': !data }">                             
-                    <editor-controller :data="data || {}" :preview="false" :date=date></editor-controller>
+                    <editor-controller :data="data || {}" :preview="false" :date=date :month="month" :year="year"></editor-controller>
                 </div>
             </div>
         </div>
