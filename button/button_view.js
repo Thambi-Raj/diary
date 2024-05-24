@@ -22,8 +22,7 @@ var button_component = {
     emits:['button_clicked'],
     methods:{
         button_clicked(){
-            this.root_ref.eventbus.change_right_template('container')
-            this.root_ref.eventbus.change_head(this.icon_name);
+            this.root_ref.eventbus.open_favourite(this.icon_name);
         }
     }
     

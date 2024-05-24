@@ -7,16 +7,15 @@
     padding-left: 0.7vw;
     cursor: pointer;
 }
-
 .dropdown_root>#dropdown_head>.material-symbols-outlined:first-child {
     width: 15%;
     font-size: 1vw;
     margin-top: 0.1vw;
 }
-
 .dropdown_root>#dropdown_head>.drop_down {
     position: absolute;
     right: 7%;
+    font-size: 1.3vw;
 }
 .dropdown_root>#dropdown_head>.hide {
     display: none;

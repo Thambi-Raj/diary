@@ -53,15 +53,11 @@ var dropdown_component = {
     methods:{
         change_value(value){
             this.selected = value;
-            this.root_ref.eventbus.change_value(value);
-            // this.$emit('change_value',this.selected);
+            this.$emit('change_value',this.name,value);
         },
         change_activestate(){
-            // this.$emit('change_activestate',this.id);
-            this.root_ref.eventbus.change_head(this.name);
-            this.root_ref.eventbus.change_value(this.dropdown_data[0]);
-            this.root_ref.eventbus.change_right_template('calendar');
-            this.root_ref.eventbus.get_dropdown_values(this.name);
+            // this.root_ref.eventbus.open_editor({'year':this.name,'month':this.dropdown_data[0],'view':'calendar'});
+            this.$emit('change_value',this.name,this.dropdown_data[0]);
             this.show_dropdown = !this.show_dropdown;
             this.dropdown_icon = this.dropdown_icon=="arrow_drop_up" ?"arrow_drop_down":"arrow_drop_up";
         }

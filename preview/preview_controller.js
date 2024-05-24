@@ -8,8 +8,8 @@ const preview_controller = {
                     :month="month"
                     :year="year"
                     :root_ref="root_ref"
-                    @add_fav="add_fav"
-                    @change_date="change_date"
+                    @add_to_fav="add_fav"
+                    @change_data="change_data"
                 ></preview-root>`,
     props: {
         show_date: {
@@ -52,10 +52,10 @@ const preview_controller = {
             return this.data;
         },
         add_fav(date) {
-            this.$emit('add_to_favourite', date);
+            this.root_ref.eventbus.add_to_favourite(date); 
         },
-        change_date(date) {
-            this.$emit('change_default_date', date);
+        change_data(data) {
+            this.root_ref.eventbus.open_diary(data);
         }
     }
 };

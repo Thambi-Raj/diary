@@ -7,11 +7,7 @@ const previewSidebar_controller = {
                    :total_count="total_count"
                    :favourite_data="favourite_data"
                    :root_ref="root_ref"
-                   @year_change="change_year" 
-                   @month_change="change_month"
-                   @back_page="back"
-                   @change_date="change_date"
-                   @add_favourite="add_favourite"
+                   @change_value="change_value" 
                    >
                    </previewSidebar-root>`,
   props: {
@@ -60,20 +56,8 @@ const previewSidebar_controller = {
   },
 
   methods: {
-    change_year(data) {
-      this.$emit('drop', data, 'calendar')
+    change_value(year,month) {
+      this.root_ref.eventbus.open_calendar(year,month,'editor');
     },
-    change_month(data) {
-      this.$emit('drop1', data);
-    },
-    back(month_Array, year, date) {
-      this.$emit('back', year, month_Array, date);
-    },
-    change_date(date) {
-      this.$emit('change_default_date', date);
-    },
-    add_favourite(date) {
-      this.$emit('add_fav', date)
-    }
   },
 }

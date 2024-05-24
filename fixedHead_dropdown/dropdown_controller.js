@@ -8,7 +8,7 @@ var dropdown_controller = {
                         :active ='active' 
                         :root_ref="root_ref"
                         @change_value = change_value
-                        @change_activestate=change_activestate>
+                    >
                     </dropdown-root>
                </div>
         `,
@@ -37,11 +37,9 @@ var dropdown_controller = {
     },
     emits:['change_value','change_active'],
     methods: {
-        change_value(data){
-            this.$emit('change_value',data);
+        change_value(year,month){
+            console.log(month);
+            this.root_ref.eventbus.open_calendar(year,month);
         },
-        change_activestate(data){
-            this.$emit('change_active',data,'calendar');
-        }
     }           
 }

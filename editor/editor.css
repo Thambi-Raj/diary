@@ -11,16 +11,18 @@
 .editor-root>#header{
     width: 90%;
     height: 3vw;
+    /* border: solid 0.5px #e2e2e2; */
     display: flex;
     align-items: center;
     justify-content: space-between;
-    background-color: #e6e6e6;
-    border-radius: 0.3vw 0.3vw 0 0;
+    background-color: #dfdfdfb0;
+    border-radius: 0.3vw;
 }
 .editor-root>#header>#left{
-    width: 75%;
+    width: 74%;
     height: 100%;
     display: flex;
+    justify-content: space-between;
 }
 .editor-root>#header>#left>#back{
     width: max-content;
@@ -31,11 +33,12 @@
     padding: 0vw 0.8vw;
     cursor: pointer;
     border-right: 1px solid #c0baba59;
+    border-radius: .3vw 0vw 0vw 0.3vw;
 }
-.editor-root>#header>#left>#back:hover{
+/* .editor-root>#header>#left>#back:hover{
     background-color: #dddddd;
     border-radius: .3vw 0vw 0vw 0 ;
-}
+} */
 .editor-root>#header>#left>#back:hover>#back-icon{
     transform: scale(1);
     color:#666;
@@ -48,36 +51,36 @@
     display: flex;
     justify-content: center;
     align-items: center;
-    color: #828282;
-     transform: scale(0.9);
-     transition: .1s ease-in-out;
+    color: #666;
+    transform: scale(0.9);
+    transition: .01s ease-in-out;
 }
 .editor-root>#header>#date{
     width: 25%;
     height: 2.5vw;
 }
 .editor-root>#header>#left>#editor-tool {
-    width:60%;  
+    width: 76%;
     display: flex;
     justify-content: space-between;
     align-items: center;
     height: 3vw;
     padding: 0vw 0.5vw;
-    background-color: #e6e6e6;
+    background-color: #dfdfdf00;
 }
 .editor-root>#header>#left>#editor-tool>.button {
-    padding: 0.3vw;
+    padding:0 0.4vw;
     display: flex;
     align-items: center;
     cursor: pointer;
     border-radius: 5px;
-    height: 1.5vw;
+    height: 1.7vw;
     border: 1px solid transparent;
     color: #666;
     transition: .1s ease-in-out;
 }
 .editor-root>#header>#left>#editor-tool>.button:hover{
-    background-color:#e0e0e0 ;
+    background-color:#f2f2f2 ;
 }
 .editor-root>#header>#left>#editor-tool>.button > .fa-heart{
     font-size: 1vw;
@@ -88,7 +91,7 @@
     color: #666 !important;
 }
 .editor-root>#header>#left>#editor-tool>.button>span{
-    font-size: .8vw;
+    font-size: 1vw;
     margin-top: 0.1vw;
 }
 .editor-root>#header>#left>#editor-tool>.button>.hide{
@@ -108,14 +111,14 @@
     align-items: center;
     width: max-content;
     justify-content: space-evenly;
-    border: 1px solid #c9c9c96e;
+    border: 1px solid #cbcbcb;
     border-radius: 5px;
     position: relative;
     cursor: pointer;
     padding: .4vw;
-    height: 1.5vw;
+    height: 1.8vw;
     transition: .1s ease-in-out;
-    font-size: 0.6vw;
+    font-size: 0.7vw;
 }
 .editor-root>#header>#left>#editor-tool>.file:hover{
     background-color:#e0e0e0 ; 
@@ -163,14 +166,15 @@
     flex-direction: column;
     width: max-content;
     height: 80%;
-    padding: 0vw 1vw;
+    padding: 0.2vw 1vw;
 }
  .editor-root>#header>#right>#date{
     height: 50%;
     display: flex;
-    font-size: 1vw;
+    font-size: .8vw;
     align-items: center;
     font-weight: bold;
+    justify-content: right;
     
 } .editor-root>#header>#right>#month{
 
@@ -190,7 +194,7 @@
     justify-content: center;
 }   */
 .editor-root>#texture-field {
-    height: calc(100% - 3vw);
+    height: calc(100% - 3.5vw);
     width: 90%;
     border-radius:0px 0px 10px 10px;
     background-image: url(texture31.webp);
@@ -221,7 +225,7 @@
 .editor-root>#texture-field>#word-pad{
 background-color: #e8bebeab;
 height: 100%;
-width: 78.3%;
+width: 78.8%;
 outline: none;
 border-radius: 0px 0px 0px 5px;;
 font-size: 15px;
@@ -246,7 +250,7 @@ line-height: 2vw;
     cursor: col-resize;
     display: flex;
     align-items: center;
-    width: .7%;
+    width: .3%;
     background-color: #fff;
     transition: .1s ease-in-out;
 }

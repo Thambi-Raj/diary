@@ -1,7 +1,7 @@
 .drop-down-root{ 
     width: fit-content;
     position: relative;
-    font-size: .6vw;
+    font-size: .7vw;
 }
 .drop-down-root>span:not(.material-symbols-outlined){
     font-size: .8vw;
@@ -25,9 +25,9 @@
 .drop-down-root>#drop-down-head {
     display: flex;
     width: max-content;
-    height: 1.5vw;
+    height: 1.8vw;
     align-items: center;
-    border: 1px solid #c9c9c96e;
+    border: 1px solid #cbcbcb;
     border-radius: 5px;
     padding: .4vw;
     position: relative;
@@ -48,29 +48,42 @@
     padding-left: .2vw;
 }
 .drop-down-root>#drop-down-head>.material-symbols-outlined:first-child{
-    font-size: 1vw;
+    font-size: 1.1vw;
+    margin-top: .1vw;
     padding-left: 0vw !important    ;
 }
 .drop-down-root>.normal_width{
-    width: 6.5vw !important;
+    width: 7vw !important;
 }
 .drop-down-root>.normal_width_dropdown{
-    width: 6.5vw !important;
+    width: 7vw !important;
 }
 .drop-down-root>#option {
     position: absolute;
-    display: flex;
-    flex-direction: column;
-    align-items: center;
     z-index: 1;
     visibility: visible;
     background-color: #fff;
     border-radius: 3px;
     border-top: none;
     border-left: none;
+    min-height: fit-content;
+    max-height:10vw;
+    overflow: auto;
+    overflow-x: hidden;
+}
+.drop-down-root>#option::-webkit-scrollbar {
+    width: 5px;  
+    height: 10px; 
+}
+.drop-down-root>#option::-webkit-scrollbar-track {
+    background: #dcdcdc;  
+}
+.drop-down-root>#option::-webkit-scrollbar-thumb {
+    background-color: #c1c1c1; 
+    border-radius: 10px;  
 }
 .drop-down-root>#option>.material-symbols-outlined{
-    font-size: 1vw;
+    font-size: 1.1vw;
 }
 .drop-down-root>#option>span{
     padding: .3vw;
@@ -99,8 +112,8 @@
     transition: .05s ease-in-out;
 }
 .drop-down-root>#option>.image_dropdown>img{
-        width: .8vw;
-        height: .8vw;
+        width: .9vw;
+        height: .9vw;
 }
 .drop-down-root>#option>img{
     width: 1vw;
@@ -115,6 +128,6 @@
     background-color: #d2cece82;
 }
 .drop-down-root>#drop-down-head>.drop-down-image{
-    width: .8vw;
-    height: .8vw;
+    width: .9vw;
+    height: .9vw;
 }

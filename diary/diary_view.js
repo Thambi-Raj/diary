@@ -18,7 +18,7 @@ const diary_component = {
                 :data="month_preview"
                 :favourite_data="favourite_data"
                 :root_ref="root_ref"
-                >
+            >
             </previewSidebar-controller>
         </div>
         <div id="right-container-root">
@@ -33,6 +33,8 @@ const diary_component = {
                 :date="default_date"
                 :month="dropdown_value"
                 :year="dropdown_selected"
+                :root_ref=root_ref
+                :back="favourite_template"
                 @save_json_content="save_json"
                 :preview="true">
         </editor-controller>
@@ -73,12 +75,22 @@ const diary_component = {
             type:Array
         }
     },
+    watch:{
+        right_template(ne,old){
+            if(ne =='editor' && old == 'container'){
+                this.favourite_template = 'container';
+            }
+            else{
+                this.favourite_template = 'calender';
+            }
+        }
+    },
     emits: ['change_page','page_change', 'change_dropdown_value', 'change_dropdown_head',"save_json","change_date","add_fav"," change_left_pane","change_editor_view","get_favourite_data","update_month_preview"],
     data() {
         return {
             result_template: '',
             months: ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'],
-            favourite_template:false,
+            favourite_template:'calendar',
             actived:this.dropdown_selected
         };
     },

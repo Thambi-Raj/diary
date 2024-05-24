@@ -1,10 +1,11 @@
 const previewSidebar_component = {
     template: `<div class="content-sidebar">
                     <div id="head"> 
-                        <span class="material-symbols-outlined" @click="back">logout</span>
+                       <div id="content">
                         <simple-dropdown-controller width="sidebar-dropdown" :default_val="month" :data="month_array" :name="'month'" :tag="'-'" @change_format="change_month"></simple-dropdown-controller>
                         <simple-dropdown-controller width="sidebar-dropdown" :default_val="year" :data="year_Array" :name="'year'" :tag="'-'" @change_format="change_year"></simple-dropdown-controller>
-                    </div>
+                       </div>
+                     </div>
                     <div id="body" ref="scroll_container">
                         <div id="day-container" v-for="date in total_count" :key="date" :class="{ active: date === this.date }" >
                         <preview-controller 
@@ -67,15 +68,10 @@ const previewSidebar_component = {
             e.srcElement.classList.add('default_class');
         },
         change_month(val){
-            this.root_ref.eventbus.change_value(val)
+            this.$emit('change_value',this.year,val);
         },
         change_year(val){
-            this.root_ref.eventbus.change_head(val);
-            this.root_ref.eventbus.get_dropdown_values(val);
-            this.root_ref.eventbus.change_value(this.month_array[0]);
-        },
-        back() {
-            this.root_ref.eventbus.change_right_template('calendar');  
+            this.$emit('change_value',val,this.month_array[0]);
         },
     }
 }

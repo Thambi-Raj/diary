@@ -2,7 +2,7 @@ const editor_component = {
     template: `<div class="editor-root" ref="editor_width" :class="{ preview: preview_class !== '' }">
                 <div id="header"  v-if="preview">
                      <div id="left">
-                         <div id="back">
+                         <div id="back" title="Back to calendar"  @click="back_to_page">
                             
                                   <span id="back-icon" class="material-symbols-outlined">
                                          arrow_back
@@ -131,12 +131,15 @@ const editor_component = {
         },
         month:{
             type:String
-        }
+        },
+        root_ref:{
+            type:Object
+        },
     },
     mounted() {
         this.check_for_draft();
         this.check_for_preview();
-        this.images_url =this.image;  
+        this.images_url =this.image; 
     },
     watch: {
         date(){
@@ -155,6 +158,9 @@ const editor_component = {
         },
     },
     methods: {
+        back_to_page(){
+             this.$emit('back_page');
+        },
         editor_click_event(e){
             if(this.preview){
                 if (e.srcElement != this.$refs.content) {

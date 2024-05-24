@@ -9,8 +9,10 @@ const editor_controller = {
                 :height=height
                 :year="year"
                 :month="month"
+                :root_ref="root_ref"
+                :back="back"
                 @save_content="save_content"
-                @add_fav="add_fav"
+                @back_page="back_page"
                 > 
               </editor-root>`,
     props:{
@@ -28,6 +30,12 @@ const editor_controller = {
             type:Number
         },
         month:{
+            type:String
+        },
+        root_ref:{
+            type:Object
+        },
+        back:{
             type:String
         }
     },
@@ -51,6 +59,14 @@ const editor_controller = {
           }
     },
     methods:{   
+            back_page(){
+                if(this.back =='container'){
+                    this.root_ref.eventbus.open_favourite('favorite');
+                }
+                else{
+                    this.root_ref.eventbus.open_calendar(this.year,this.month);
+                }
+            },
             get_decode_html(){
                 var string='';
                 if(this.data){
@@ -235,12 +251,9 @@ const editor_controller = {
                 this.images = images.length;
                 json_content["global_props"]={"background_image":background};
                 this.height = height;
-                this.$emit('save_json_content',json_content,date);     
+                console.log('aa');
+                this.root_ref.eventbus.save(json_content,date);
             },
-            add_fav(){
-                this.$emit('add_fav');
-            },
-
             decoded_html_string(editor_content){
                 var res_string = '';
                 for (var i = 0; i < editor_content.length ; i++) {

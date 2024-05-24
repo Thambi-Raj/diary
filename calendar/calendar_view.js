@@ -59,8 +59,13 @@ const calendar_component = {
     created(){
         this.set_config_data();
     },
-    updated() {
-        this.set_config_data();
+    watch:{
+        month(){
+            this.set_config_data();
+        },
+        year(){
+            this.set_config_data();
+        }
     },
     methods: {
         set_config_data() {

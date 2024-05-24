@@ -83,19 +83,18 @@
             dropdown_values:[],
             default_date: 1,
             favourite_data: [],
-            month_preview: this.get_month_preview(2024, "Apr"),
+            month_preview: {},
             default_date_data: {},
             eventbus:{},
             app:this,
             right_template:'calendar',
-            favourite_template:false,
         }
     },
     created() {
         this.get_data();
-        this.check_favourite();
-        this.construct_container_format('favourite');
-        this.get_dropdown_values(2024)
+        this.construct_container_format();
+        this.get_dropdown_values(2024);
+        this.month_preview = this.get_month_preview(this.dropdown_selected,this.dropdown_value);
     },
     emits: ["page_change", "change_dropdown_head", "change_dropdown_value", "change_date", "add_fav", "get_favourite_data"],
     methods: {
@@ -103,99 +102,105 @@
             this.month_preview = this.get_month_preview(this.dropdown_selected, this.dropdown_value);
         },
         construct_container_format() {
-            var data = JSON.parse(localStorage.getItem('favorite'));
+            var data = JSON.parse(localStorage.getItem('favorite1'));
             var result = [];
+            var monthNames = ["Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"];
             if (data != null) {
-                var keys = Object.keys(data).sort().reverse();
-                for (var i = 0; i < keys.length; i++) {
-                    var month = Object.keys(data[keys[i]]);
-                    var res = this.month_based_sort(month);
-                    for (var j = 0; j < res.length; j++) {
-                        var get_date = Object.keys(data[keys[i]][res[j]]).sort();
-                        if (get_date.length >= 1) {
-                            var s = res[j] + '_' + keys[i];
-                            var obj = {};
-                            obj[s] = get_date;
-                            result.push(obj);
-                        }
+                var keys = Object.keys(data);
+                var obj = {};
+                var res = [];
+                var prev = '';
+                for (var i = keys.length - 1; i >= 0; i--) {
+                    var date_format = new Date(parseInt(keys[i]));
+                    var month = date_format.getMonth();
+                    var year = date_format.getFullYear();
+                    if (prev ==monthNames[month] + '_' + year || Object.keys(obj).length === 0) {
+                        prev = monthNames[month] + '_' + year;
+                        res.push(date_format.getDate());
+                    } else {
+                        obj[prev] = res;
+                        result.push(obj);
+                        prev = monthNames[month] + '_' + year;
+                        obj = {};
+                        res = [date_format.getDate()];
                     }
+                }
+                obj[prev] = res;
+                if(prev!=''){
+                    result.push(obj);
                 }
                 this.favourite_data = result;
             }
         },
-        month_based_sort(array) {
-            var month = { "Jan": 0, "Feb": 1, "Mar": 2, "Apr": 3, "May": 4, "Jun": 5, "Jul": 6, "Aug": 7, "Sep": 8, "Oct": 9, "Nov": 10, "Dec": 11 };
-            var index_month = [];
-            var result = [...array];
-            for (var i = 0; i < array.length; i++) {
-                index_month.push(month[array[i]]);
-            }
-            for (var i = 0; i < index_month.length; i++) {
-                for (var j = i + 1; j < index_month.length; j++) {
-                    if (index_month[i] < index_month[j]) {
-                        var temp = index_month[i];
-                        index_month[i] = index_month[j];
-                        index_month[j] = temp;
-                        var temp1 = result[i];
-                        result[i] = result[j];
-                        result[j] = temp1;
-                    }
-                }
-            }
-            return result;
-        },
         save_json(json, date) {
             var ref = this;
-            var get_local = !localStorage.getItem("Data") ? {} : JSON.parse(localStorage.getItem("Data"));
-            get_local[this.dropdown_selected] = get_local[this.dropdown_selected] || {};
-            get_local[this.dropdown_selected][this.dropdown_value] = get_local[this.dropdown_selected][this.dropdown_value] || {};
-            get_local[this.dropdown_selected][this.dropdown_value][date] = { ...json };
+            var timestampData = localStorage.getItem("Data1") ? JSON.parse(localStorage.getItem("Data1")) : {};
+            timestampData[this.get_timestamp(date)] ={...json};
             setTimeout(() => {
-                localStorage.setItem("Data", JSON.stringify(get_local));
-                ref.update_month_preview()
-            }, 500);
+                localStorage.setItem("Data1", JSON.stringify(timestampData));
+                ref.update_month_preview(); 
+            }, 100);
+        },
+        get_timestamp(date){
+            var month = { "Jan": 0, "Feb": 1, "Mar": 2, "Apr": 3, "May": 4, "Jun": 5, "Jul": 6, "Aug": 7, "Sep": 8, "Oct": 9, "Nov": 10, "Dec": 11 };
+            var newDate = new Date(this.dropdown_selected, month[this.dropdown_value], date);
+            return newDate.getTime();
         },
         add_fav(date) {
             var check = this.check_favourite(date);
-            var get_local = !localStorage.getItem("favorite") ? {} : JSON.parse(localStorage.getItem("favorite"));
-            if (check) {
-                delete get_local[this.dropdown_selected][this.dropdown_value][date];
+            var favo_data = !localStorage.getItem("favorite1") ? {} : JSON.parse(localStorage.getItem("favorite1"));
+            var timestramp =this.get_timestamp(date);
+            if(check){
+                delete favo_data[timestramp];
             }
-            else {
-                get_local[this.dropdown_selected] = get_local[this.dropdown_selected] || {};
-                get_local[this.dropdown_selected][this.dropdown_value] = get_local[this.dropdown_selected][this.dropdown_value] || {};
-                get_local[this.dropdown_selected][this.dropdown_value][date] = true;
+            else{
+                favo_data[timestramp] = true;
             }
-            localStorage.setItem("favorite", JSON.stringify(get_local));
-            this.construct_container_format('favorite');
-            this.total_favourite = { ...get_local }
+            localStorage.setItem("favorite1", JSON.stringify(favo_data));
+            this.construct_container_format();
+            this.total_favourite = { ...favo_data }
         },
         get_data() {
-            var get_local = !localStorage.getItem("Data") ? {} : JSON.parse(localStorage.getItem("Data"));
-            var condition = get_local
-                && get_local[this.dropdown_selected] &&
-                get_local[this.dropdown_selected][this.dropdown_value]
-                && get_local[this.dropdown_selected][this.dropdown_value][this.default_date];
-            this.default_date_data = condition ? condition : {};
+            var get_local = !localStorage.getItem("Data1") ? {} : JSON.parse(localStorage.getItem("Data1"));
+            var timestramp = this.get_timestamp(this.default_date);
+            this.default_date_data = get_local[timestramp] ? get_local[timestramp]:{};
         },
         check_favourite(date) {
-            var get_local = !localStorage.getItem("favorite") ? {} : JSON.parse(localStorage.getItem("favorite"));
-            this.total_favourite = get_local;
-            var condition = get_local
-                && get_local[this.dropdown_selected] &&
-                get_local[this.dropdown_selected][this.dropdown_value]
-                && get_local[this.dropdown_selected][this.dropdown_value][date];
-            if (condition) {
-                return true;
-            }
-            return false;
+            var favo_data = !localStorage.getItem("favorite1") ? {} : JSON.parse(localStorage.getItem("favorite1"));
+            var timestamp = this.get_timestamp(date);
+            if(favo_data[timestamp] == undefined){
+                return false;
+            }  
+            return true;
         },
         get_month_preview(year, month) {
-            var get_local = !localStorage.getItem("Data") ? {} : JSON.parse(localStorage.getItem("Data"));
-            var condition = get_local
-                && get_local[year] &&
-                get_local[year][month];
-            return condition ? get_local[year][month] : {};
+            var get_local = !localStorage.getItem("Data1") ? {} : JSON.parse(localStorage.getItem("Data1"));
+            var start_timestamp = this.get_timestamp(1);
+            var last_date = this.get_lastday(year, month);
+            var end_timestamp = this.get_timestamp(last_date);
+            var filteredKeys = Object.keys(get_local).filter(key => {
+                var timestamp = parseInt(key);
+                return timestamp >= start_timestamp && timestamp <= end_timestamp;
+            });
+            var filteredObject = {};
+            filteredKeys.forEach(key => {
+                filteredObject[key] = get_local[key];
+            });
+            var result =  this.month_preview_json(filteredObject);
+            return  result;
+        },
+        get_lastday(year,month){
+            var month_array = { "Jan": 0, "Feb": 1, "Mar": 2, "Apr": 3, "May": 4, "Jun": 5, "Jul": 6, "Aug": 7, "Sep": 8, "Oct": 9, "Nov": 10, "Dec": 11 };
+            var last_day = new Date(year,month_array[month]+1,0).getDate();
+            return last_day;
+        },
+        month_preview_json(json){
+            var res={};
+            Object.keys(json).forEach(d=>{
+               var date = new Date(parseInt(d)).getDate();
+               res[date] ={...json[d]}
+            })
+            return res;
         },
         get_dropdown_values(name){
             var month = ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec']
@@ -203,21 +208,7 @@
             var mon = new Date().getMonth();
             this.dropdown_values = cur == name ? month.slice(0, mon + 1) : month;
         },
-        change_template(name){ 
-            var temp =this.right_template;
-            if(this.favourite_template){
-                this.right_template ='container';
-                this.dropdown_selected ='favorite';
-                this.favourite_template =false;
-            }
-            else{
-                this.right_template=name;
-            } 
-            if(temp =='container' && name =='editor'){
-                this.favourite_template =true;
-            }
-
-        }
+        
     },
     })
     app.component('event-bus',event_bus)
