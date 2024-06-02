@@ -24,14 +24,22 @@ const editor_component = {
                             </div>
                             <div class="file">
                                 <label for="Color">Color &nbsp;&nbsp;</label>
-                                <input type="color" id="Color" @change="change_text_format($event.target.value, 'forecolor', 'font')" :value="active_state.color" ref="color_input">
+                                <input type="color" id="Color" @change="change_text_format($event.target.value, 'forecolor',)" :value="active_state.color" ref="color_input">
                             </div>
-                                <simple-dropdown-controller width="font_size_width" :default_val="active_state['font-size']" :data="font_size" :name="'FontSize'" :tag="'-'" @change_format="change_text_format"></simple-dropdown-controller>
-                            <simple-dropdown-controller width="normal_width":default_val="active_state['font-family']" :data="font_family" :name="'FontName'" :tag="'-'" @change_format="change_text_format"></simple-dropdown-controller>
-                            <simple-dropdown-controller width="small_width" :default_val="active_state['align']" :data="align" :name="'align'" :tag="'span'" @change_format="change_text_format"></simple-dropdown-controller>
-                            <simple-dropdown-controller width="small_width" :default_val="back_ground" :data="texture" :name="'background'" :tag="'image'" @change_background="change_background"></simple-dropdown-controller>
-                            
+                            <div id="font_size">
+                                <dropdown-controller :selected="active_state['font-size']" :data="font_size"  :tag="'-'"  @change="(val) => change_text_format(val, 'FontSize')" ></dropdown-controller>
+                            </div>
+                            <div id="font_family">
+                                <dropdown-controller :selected="active_state['font-family']" :data="font_family"  :tag="'-'"  @change="(val) => change_text_format(val, 'FontName')"></dropdown-controller>
+                            </div>
+                            <div class="icon_dropdown" >
+                                <dropdown-controller  :selected="active_state['align']" :data="align"  :tag="'span'" @change="change_text_align"></dropdown-controller>
+                            </div>
+                            <div class="icon_dropdown">
+                                <dropdown-controller  :selected="back_ground" :data="texture" :tag="'image'" @change="change_background"></dropdown-controller>    
+                            </div>
                             </div> 
+                                                                                                                       
                 </div>
                 <div id="right"> 
                  <div id="date">
@@ -79,17 +87,17 @@ const editor_component = {
             font_family: ["sans-serif", "Arial", "Helvetica", "Times New Roman", "Georgia", "Courier New", "Verdana", "Tahoma", "Trebuchet MS", "Palatino Linotype", "Arial Black", "Comic Sans MS", "Impact", "Lucida Console", "Garamond", "Century Gothic", "Calibri", "Book Antiqua", "Franklin Gothic Medium", "Cambria", "Rockwell"],
             heading: ["normal", "H1", "H2", "H3"],
             align: ["format_align_left", "format_align_justify", "format_align_right"],
-            texture: ["texture31.webp", "texture1.jpg", "texture6.avif", "texture2.jpg", "texture44.webp", "texture51.jpg"],
+            texture: ["texture1.jpg", "texture6.avif", "texture2.jpg", "texture44.webp", "texture51.jpg","blue.jpg"],
             active_state: {
                 'bold': false,
                 'italic': false,
                 'underline': false,
                 'font-size': '15px',
-                'color': '#444',
+                'color': '#444444',
                 'font-family': 'sans-serif',
                 'formatBlock': 'normal',
                 'align': 'format_align_left',
-                'background': 'texture31.webp'
+                'background': '"texture1.jpg"'
             },
             start_line: {
                 'b': 'bold',
@@ -107,9 +115,10 @@ const editor_component = {
             height:''
         };
     },
+
     props: {
         data: {
-            type: Object
+            type: [Object,Boolean]
         },
         template: {
             type: String
@@ -127,14 +136,17 @@ const editor_component = {
             type:[Number,String]
         },
         year:{
-            type:Number
+            type:[Number,String]
         },
         month:{
             type:String
         },
-        root_ref:{
-            type:Object
+        root_ref: {
+            type: Object
         },
+        root_event:{
+            type:Object
+        }
     },
     mounted() {
         this.check_for_draft();
@@ -294,6 +306,7 @@ const editor_component = {
             };
             this.$refs.editor_width.addEventListener('mousemove', mousemoveHandler);
             this.$refs.editor_width.addEventListener('mouseup', mouseupHandler);
+           
         },
         drag_move(prev, result_x, target) {
             const background = this.$refs.back_ground.getBoundingClientRect();
@@ -435,8 +448,9 @@ const editor_component = {
                 child = child.childNodes[forward ? 0 : child.childNodes.length - 1];
             }
         },
-        change_text_format(format, value, font_tag) {
-            if (font_tag) {
+        change_text_format(format, value) {
+            var font = ['forecolor','FontName','FontSize'];
+            if (font.includes(value)) {
                 document.execCommand(value, false, format.replace('px', ''));
                 this.fontTag_contents(format, value);
             }
@@ -448,6 +462,16 @@ const editor_component = {
             }
             this.save_content(this.date);
             this.$refs.content.focus();
+        },
+        change_text_align(data){
+            const alignment = {
+                format_align_justify: 'justifyFull',
+                format_align_right: 'justifyRight',
+                format_align_left: 'justifyLeft',
+                format_align_center: 'justifyCenter'
+              };
+                document.execCommand(alignment[data], false, null);
+                this.active_state['align']= data 
         },
         fontTag_contents(format, value) {
             this.check_fontfamily_Attribute(format, value);
@@ -522,11 +546,11 @@ const editor_component = {
                 'italic': false,
                 'underline': false,
                 'font-size': '15px',
-                'color': '#666666',
+                'color': '#444444',
                 'font-family': 'sans-serif',
                 'formatBlock': 'normal',
                 'align': 'format_align_left',
-                'background': 'texture31.webp'
+                'background': "texture1.jpg"
             }
         },
         open_image_in_fullView(e,url) {
@@ -541,8 +565,8 @@ const editor_component = {
                 this.set_background_image_for_editor(props);
             }
             else {
-                this.$refs.back_ground.style.backgroundImage = `url(${"texture31.webp"})`
-                this.back_ground = "texture31.webp"
+                this.$refs.back_ground.style.backgroundImage = `url(${"texture1.jpg"})`
+                this.back_ground = "texture1.jpg"
             }
         },
         set_background_image_for_editor(props) {

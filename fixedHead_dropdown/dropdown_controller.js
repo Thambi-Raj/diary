@@ -1,45 +1,45 @@
 var dropdown_controller = {
-    template: `<div :class="active == name ? 'section clicked' : 'section' "  > 
-                    <dropdown-root  
-                        :icon=icon 
-                        :name='name'
-                        :default_selected='default_selected'
-                        :dropdown_data=" dropdown_data"
-                        :active ='active' 
-                        :root_ref="root_ref"
-                        @change_value = change_value
+    template: `<div :class="expand ? 'section clicked' : 'section' "  > 
+                    <expandable-list-root  
+                        :icon=prepend_icon 
+                        :name=name
+                        :selected='selected_item'
+                        :data="items"
+                        :expand =expand 
+                        @change_value = change_value    
                     >
-                    </dropdown-root>
+                    </expandable-list-root>
                </div>
         `,
     props:{
-        default_selected:{
-            type: String,
-        },
-        dropdown_data:{
-            type: Array,
+        prepend_icon:{
+            type:String
         },
         name:{
             type:[String,Number],
         },
-        icon:{
-            type:String
+        selected_item:{
+            type: String,
         },
-        active:{
-            type:[String,Number]
+        items:{
+            type: Array,
         },
-        default_selected:{
-            type:String
+        expand:{
+            type:Boolean
         },
         root_ref:{
             type:Object
+        },
+        root_events:{
+            type:Object,
         }
     },
-    emits:['change_value','change_active'],
     methods: {
-        change_value(year,month){
-            console.log(month);
-            this.root_ref.eventbus.open_calendar(year,month);
+        change_value(data){
+            this.root_ref && this.root_events.change 
+                ? this.root_ref.eventbus[this.root_events.change](data)
+                : this.$emit('dropdown_clicked',data);
         },
+        
     }           
 }

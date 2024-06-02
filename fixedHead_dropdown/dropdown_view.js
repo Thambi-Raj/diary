@@ -1,65 +1,63 @@
 
 var dropdown_component = {
+    // :icon=icon 
+    // :name='name'
+    // :selected='selected'
+    // :data=" data"
+    // :expand =expand 
+    // @change_value = change_value
     template:`
-    <div class="dropdown_root" >
-        <div id="dropdown_head" @click = change_activestate :class="active == name ? 'active' : '' " ref="dropdown">
+    <div class="expandable-list-root" >
+        <div id="dropdown_head" @click = change_activestate :class=" show ? 'active' : '' " ref="dropdown">
             <span :class = "icon ?'material-symbols-outlined':'hide'">{{icon}}</span>
             <span>{{name}}</span>
             <span class="material-symbols-outlined drop_down"> {{dropdown_icon}} </span>
         </div>
-        <div id="dropdown_body" :class="active ? active != name ? 'hide':'':''" ref="dropdown" v-if="show_dropdown">
-            <div class="dropdown-item" v-for="value in  dropdown_data" :class="{ selected : value === default_selected}" @click="change_value(value)">{{value}}</div>
+        <div id="dropdown_body" :class="{ hide: !this.show }" ref="dropdown" v-if="show">
+            <div class="dropdown-item" v-for="value in  data" :class="{ selected : value === selected}" @click="change_value(value)">{{value}}</div>
         </div>
     </div>`,
     props:{
-        default_selected:{
-            type: [Number,String]  ,
-        },
-        dropdown_data:{
-            type: Array,
+        icon:{
+            type:String
         },
         name:{
             type:[Number,String],
         },
-        icon:{
-            type:String
+        selected:{
+            type: [Number,String],
         },
-        active:{
-            type:[String,Number]
+        data:{
+            type: Array,
         },
-        root_ref:{
-            type:Object
+        expand:{
+            type:Boolean
         }
     },
     emits:['change_value','change_activestate'],
     data(){
         return {
-            selected: this.default_selected,
-            show_dropdown:true,
-            dropdown_icon:this.active  == this.id ? "arrow_drop_up":'arrow_drop_down',
+            dropdown_icon:this.expand  ? "arrow_drop_up":'arrow_drop_down',
+            show:this.expand
         }
     },
     watch:{
-        active(){
-            if(this.name == this.active){
-                this.dropdown_icon =  "arrow_drop_up";
-                this.show_dropdown = true;
-            }
-            else{
-                this.dropdown_icon =  "arrow_drop_down";
-            }
+        expand(){
+            this.dropdown_icon = this.expand  ? "arrow_drop_up":'arrow_drop_down';
+            this.show = this.expand ? true:false;
         }
     },
     methods:{
         change_value(value){
-            this.selected = value;
-            this.$emit('change_value',this.name,value);
+            var data={year:this.name,month:value};
+            this.$emit('change_value',data);
         },
         change_activestate(){
-            // this.root_ref.eventbus.open_editor({'year':this.name,'month':this.dropdown_data[0],'view':'calendar'});
-            this.$emit('change_value',this.name,this.dropdown_data[0]);
-            this.show_dropdown = !this.show_dropdown;
-            this.dropdown_icon = this.dropdown_icon=="arrow_drop_up" ?"arrow_drop_down":"arrow_drop_up";
+                console.log('aaa');
+                this.dropdown_icon = this.dropdown_icon=="arrow_drop_up" ?"arrow_drop_down":"arrow_drop_up";
+                this.show=!this.show;
+                var data={year:this.name,month:this.data[0]};
+                this.$emit('change_value',data);
         }
     }
 }

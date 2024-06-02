@@ -5,10 +5,10 @@ const editor_controller = {
                 :template  = "template"
                 :global_props = "global_props"
                 :preview="preview"
-                :date="date"
+                :date="date_config.date"
                 :height=height
-                :year="year"
-                :month="month"
+                :year="date_config.year"
+                :month="date_config.month"
                 :root_ref="root_ref"
                 :back="back"
                 @save_content="save_content"
@@ -16,34 +16,32 @@ const editor_controller = {
                 > 
               </editor-root>`,
     props:{
-        data:{
-            type:Object
-        },
         preview:{
             type:Boolean,
-            default:false
-        },
-        date:{
-            type:[Number,String]
-        },
-        year:{
-            type:Number
-        },
-        month:{
-            type:String
-        },
-        root_ref:{
-            type:Object
+            default:true
         },
         back:{
             type:String
+        },
+        root_ref: {
+            type: Object
+        },
+        root_event:{
+            type:Object
+        },
+        date_config:{
+            type:Object,
+        },
+        data:{
+            type:[Object,Boolean]
         }
     },
+    
     watch:{
         data(){
-            this.template = this.data &&  this.data["contents"]  ?  this.decoded_html_string(this.data["contents"]):'';
-            this.image =  this.data && this.data["images"] ? [...this.data["images"]] :[];
-            this.global_props =  this.data && this.data["global_props"] ? this.data["global_props"] :{};
+                this.template = this.data &&  this.data["contents"]  ?  this.decoded_html_string(this.data["contents"]):'';
+                this.image =  this.data && this.data["images"] ? [...this.data["images"]] :[];
+                this.global_props =  this.data && this.data["global_props"] ? this.data["global_props"] :{};
         },
     },
     data(){
@@ -61,10 +59,15 @@ const editor_controller = {
     methods:{   
             back_page(){
                 if(this.back =='container'){
-                    this.root_ref.eventbus.open_favourite('favorite');
+                    (this.root_ref && this.root_event.back_to_favourite)?
+                        this.root_ref.eventbus[this.root_event.back_to_favourite]('favorite')
+                        :this.$emit('back_to_favourite');
                 }
                 else{
-                    this.root_ref.eventbus.open_calendar(this.year,this.month);
+                    var data ={year:this.year,month:this.month}; 
+                    (this.root_ref && this.root_event.back_to_calendar)?
+                        this.root_ref.eventbus[this.root_event.back_to_calendar](data)
+                        :this.$emit('back_to_calendar');
                 }
             },
             get_decode_html(){
@@ -251,8 +254,10 @@ const editor_controller = {
                 this.images = images.length;
                 json_content["global_props"]={"background_image":background};
                 this.height = height;
-                console.log('aa');
-                this.root_ref.eventbus.save(json_content,date);
+                this.root_ref && this.root_event.save
+                    ?   this.root_ref.eventbus[this.root_event.save](json_content,date)
+                    :   this.$emit('save',date);
+              
             },
             decoded_html_string(editor_content){
                 var res_string = '';

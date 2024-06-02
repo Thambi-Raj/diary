@@ -17,15 +17,10 @@ const calendar_component = {
              <div id="sub-container">
              <span class="date">{{ (rowIndex - 1) * 7 + dayIndex - first_day }}</span>
              <preview-controller 
-             :year="year"
-             :month="month"
-             :favourite_data="[]"
-             :data="month_preview[(rowIndex - 1) * 7 + dayIndex - first_day] || {}"
-             :date="(rowIndex - 1) * 7 + dayIndex - first_day"
-             :show_date="false"
-             :favourite_access="false"
-             :root_ref="root_ref"
-            >
+                 :date_config="{year:year,month:month,date:(rowIndex - 1) * 7 + dayIndex - first_day}" 
+                 :data="month_preview[(rowIndex - 1) * 7 + dayIndex - first_day]"
+                 @change_data="open_diary"
+              >
             </preview-controller>
              </div>
         </div>
@@ -33,6 +28,7 @@ const calendar_component = {
 </div>
     </div>
 `,
+
     data() {
         return {
             weeks: ["SUN", "MON", "TUE", "WED", "THU", "FRI", "SAT"],
@@ -76,5 +72,8 @@ const calendar_component = {
             this.total_days = new Date(year,mon[1]+1,0).getDate();
             this.classFlag = this.first_day > 4 && this.total_days==31 ? 1 :0;
         },
+        open_diary(data){
+            this.$emit('open_diary',data);
+        }
     }
 }

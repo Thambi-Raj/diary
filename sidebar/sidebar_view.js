@@ -9,12 +9,14 @@ const sidebar_component = {
                 :dropdown_data="month_array"
                 :active="dropdown_selected"
                 :root_ref="root_ref"
+                @change_selected="change_active"
              ></dropdown-controller>
             <button-controller 
                 :button_name="'Favourites'" 
                 :icon_name="'favorite'" 
                 :root_ref="root_ref"
-                :active="dropdown_selected">
+                :active="dropdown_selected"
+                @change_selected="change_active">
                 
             </button-controller>
         </div>
@@ -33,6 +35,9 @@ const sidebar_component = {
         }
     },
     methods: {
+        change_active(name,view){
+            this.$emit('change_selected',name,view);
+;        }
     }
 };
 {/* <button-controller 

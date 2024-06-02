@@ -1,25 +1,49 @@
 const diary_component = {
     template: `
         <div id="left-container-root">
-            <sidebar-controller 
-                v-if="right_template !== 'editor'" 
-                :dropdown_selected="dropdown_selected" 
-                :dropdown_value="dropdown_value"
-                :month="dropdown_values"
-                :root_ref="root_ref"
-                :active="actived" 
-                >
-            </sidebar-controller>
-            <previewSidebar-controller v-else 
-                :year="dropdown_selected" 
-                :month="dropdown_value"
-                :date="default_date"
-                :month_Array="dropdown_values"
-                :data="month_preview"
-                :favourite_data="favourite_data"
-                :root_ref="root_ref"
-            >
-            </previewSidebar-controller>
+            <div id="calendar-side-bar"  v-if="right_template !== 'editor'" >
+                    <dropdown-controller
+                        v-for="(name, index) in  dropDown_head"
+                        :icon="'clinical_notes'"
+                        :name="name"
+                        :default_selected="dropdown_value"
+                        :dropdown_data="dropdown_values"
+                        :active="dropdown_selected"
+                        :root_ref="root_ref"
+                        @dropdown_clicked="dropdown_clicked"
+                    ></dropdown-controller>
+                    <button-controller 
+                        :button_name="'Favourites'" 
+                        :icon_name="'favorite'" 
+                        :root_ref="root_ref"
+                        :active="dropdown_selected"
+                        @button_clicked="button_clicked">
+                    </button-controller>
+            </div>
+            <div class="content-sidebar" v-show="right_template == 'editor'" id="c-sidebar">
+                    <div id="head"> 
+                       <div id="content">
+                        <simple-dropdown-controller width="sidebar-dropdown" :default_val="dropdown_value" :data="dropdown_values" :name="'month'" :tag="'-'" @change_format="editor_month_change"></simple-dropdown-controller>
+                        <simple-dropdown-controller width="sidebar-dropdown" :default_val="dropdown_selected" :data="dropDown_head" :name="'year'" :tag="'-'" @change_format="editor_year_change"></simple-dropdown-controller>
+                       </div>
+                     </div>
+                    <div id="body" ref="scroll_container" >
+                        <div id="day-container" v-for="date in total_count" :key="date" :class="{ active: date === this.default_date }" >
+                        <preview-controller 
+                            :year="dropdown_selected"
+                            :month="dropdown_value"
+                            :favourite_data="favourite_data"
+                            :data="month_preview[date]"
+                            :date="date"
+                            :root_ref="root_ref"
+                            :show_date="true"
+                            :favourite_access="true"
+                            @add_to_favourite="add_to_fav"
+                            @change_data="preview_clicked">
+                        </preview-controller>
+                        </div>
+                    </div>
+            </div>
         </div>
         <div id="right-container-root">
         <calendar-controller v-if="right_template === 'calendar'" 
@@ -35,7 +59,6 @@ const diary_component = {
                 :year="dropdown_selected"
                 :root_ref=root_ref
                 :back="favourite_template"
-                @save_json_content="save_json"
                 :preview="true">
         </editor-controller>
         <container-controller  v-if ="right_template === 'container'"
@@ -63,7 +86,7 @@ const diary_component = {
             type:Object
         },
         favourite_data:{
-            type:Array
+            type:Object
         },
         root_ref:{
             type:Object
@@ -83,20 +106,47 @@ const diary_component = {
             else{
                 this.favourite_template = 'calender';
             }
+        },
+        dropdown_value(){
+            this.total_days_in_month();
+        },
+        dropdown_selected(){
+            this.total_days_in_month();
         }
     },
-    emits: ['change_page','page_change', 'change_dropdown_value', 'change_dropdown_head',"save_json","change_date","add_fav"," change_left_pane","change_editor_view","get_favourite_data","update_month_preview"],
+    created(){
+        this.total_days_in_month();
+    },
     data() {
         return {
-            result_template: '',
             months: ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'],
             favourite_template:'calendar',
-            actived:this.dropdown_selected
+            dropDown_head:[2024,2023],
+            total_count:0
         };
     },
     methods: {
-        save_json(json,date) {   
-         this.$emit('save_json', json,date);
+        total_days_in_month(){
+            var month = this.months.indexOf(this.dropdown_value);
+            this.total_count = new Date(this.dropdown_selected, month + 1, 0).getDate();
+        },
+        button_clicked(name){
+            this.$emit('button_clicked',name);
+        },
+        dropdown_clicked(year,month){
+           this.$emit('dropdown_clicked',year,month);
+        },
+        editor_month_change(month){
+           this.$emit('dropdown_clicked',this.dropdown_selected,month,'editor')
+        },
+        editor_year_change(year){
+            this.$emit('dropdown_clicked',year,this.dropdown_values[0],'editor')
+        },
+        preview_clicked(data){
+            this.$emit('preview_clicked',data);
+        },
+        add_to_fav(date){
+            this.$emit('add_to_fav',date);
         }
     }
 };

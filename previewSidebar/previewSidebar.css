@@ -16,11 +16,6 @@
     display: flex;
     justify-content: space-between;
 }
-
-.content-sidebar>#head>#content>.drop-down-root{
-    width: 40%;
-    position: relative;
-}
 .content-sidebar>#head>#content>.drop-down-root:not(:first-child){
     width: 45%;
 }

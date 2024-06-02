@@ -23,6 +23,8 @@
     <link rel="stylesheet" href="/preview/preview.css">
     <script src="https://cdn.jsdelivr.net/npm/mitt/dist/mitt.umd.js"></script>
     <script src="eventbus.js"></script>
+    <script src="diaryQuery.js"></script>
+    <script src="diaryListQuery.js"></script>
     <script src="/diary/diary_view.js"></script>
     <script src="/diary/diary_controller.js"></script>
     <script src="/fixedHead_dropdown/dropdown_view.js"></script>
@@ -88,31 +90,33 @@
             eventbus:{},
             app:this,
             right_template:'calendar',
+            diaryList_Obj:null ,
+            diary_List:{}
         }
     },
     created() {
+        this.diaryList_Obj = new DiaryListQuery(JSON.parse(localStorage.getItem('Data1')))
+        this.diary_List = this.diaryList_Obj.getDiaryList();
         this.get_data();
-        this.construct_container_format('favourite');
+        this.construct_container_format();
         this.get_dropdown_values(2024);
         this.month_preview = this.get_month_preview(this.dropdown_selected,this.dropdown_value);
+        
     },
     emits: ["page_change", "change_dropdown_head", "change_dropdown_value", "change_date", "add_fav", "get_favourite_data"],
     methods: {
         update_month_preview() {
             this.month_preview = this.get_month_preview(this.dropdown_selected, this.dropdown_value);
-            
         },
         construct_container_format() {
             var data = JSON.parse(localStorage.getItem('favorite1'));
             var result = [];
             var monthNames = ["Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"];
-
             if (data != null) {
                 var keys = Object.keys(data);
                 var obj = {};
                 var res = [];
                 var prev = '';
-
                 for (var i = keys.length - 1; i >= 0; i--) {
                     var date_format = new Date(parseInt(keys[i]));
                     var month = date_format.getMonth();
@@ -132,7 +136,7 @@
                 if(prev!=''){
                     result.push(obj);
                 }
-                console.log(result);
+                this.favourite_data = result;
             }
         },
         save_json(json, date) {
@@ -141,7 +145,9 @@
             timestampData[this.get_timestamp(date)] ={...json};
             setTimeout(() => {
                 localStorage.setItem("Data1", JSON.stringify(timestampData));
+                ref.diaryList_Obj.updateDiary(this.get_timestamp(date),timestampData);
                 ref.update_month_preview(); 
+                // this.month_preview = ref.diaryList_Obj.getMonthData(ref.dropdown_selected,ref.dropdown_value);
             }, 100);
         },
         get_timestamp(date){
@@ -159,12 +165,15 @@
             else{
                 favo_data[timestramp] = true;
             }
-            localStorage.setItem("favorite1", JSON.stringify(favo_data));
+            localStorage.setItem("favorite1", JSON.stringify(favo_data));   
+            this.construct_container_format();
+            this.total_favourite = { ...favo_data }
         },
         get_data() {
             var get_local = !localStorage.getItem("Data1") ? {} : JSON.parse(localStorage.getItem("Data1"));
             var timestramp = this.get_timestamp(this.default_date);
             this.default_date_data = get_local[timestramp] ? get_local[timestramp]:{};
+            this.default_date_data = this.diaryList_Obj.currentDateData(this.dropdown_selected,this.dropdown_value,this.default_date);
         },
         check_favourite(date) {
             var favo_data = !localStorage.getItem("favorite1") ? {} : JSON.parse(localStorage.getItem("favorite1"));

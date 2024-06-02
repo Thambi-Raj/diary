@@ -7,30 +7,22 @@ const container_component = {
                         </div>
                     </div>
                     <div id="container-body">
-                         <div  v-for="(item, index) in container_data" :key="index">
-                           <div id="main_container" v-for="(value, key) in item" :key="key">
-                                <div id="head">
-                                 <span>{{split_name_for_head(key)}}</span>
+                        <div v-for="(value, index) in month" :key="index">
+                            <div id="head" >
+                                {{value}}
+                            </div>
+                            <div id="content">
+                                 <div id="container" v-for="(val, i) in content_data[value]" :key="i">
+                                    <preview-controller 
+                                        :date_config="{ year: get_year_month(value, 'year'), month: get_year_month(value), date: val }"
+                                        :data="get_data(value, val)"
+                                        @change_data="open_diary"
+                                    >  
+                                    </preview-controller>
+                                    <span id="date">{{val}}</span>
                                 </div>
-                                <div id="content">
-                                  <div id="sub_container" v-for="val in value" :key="val" @click="get_key_for_data(key, val,'click')">
-                                     <div id="first_div">
-                                        <preview-controller 
-                                            :year="get_year(key)"
-                                            :month="get_month(key)"
-                                            :favourite_data="container_data"
-                                            :data="get_key_for_data(key,val)"
-                                            :date=get_date(val)
-                                            :show_date="false"
-                                            :favourite_access="false"
-                                            :root_ref=root_ref>
-                                        </preview-controller>
-                                        <span id="date">{{val}}</span>
-                                     </div>
-                                  </div>
-                                </div>
-                           </div>
-                         </div>
+                            </div>
+                        </div>
                     </div>
               </div>`
         ,
@@ -42,45 +34,62 @@ const container_component = {
             type: String
         },
         container_data: {
-            type: Array
+            type: Object
         },
-        root_ref:{
-            type:Object
-        }
     },
     data() {
         return {
-            content: {},
+            content_data: {},
+            month :[], 
             preview:true
         }
     },
     created() {
-        this.content = JSON.parse(localStorage.getItem('Data1')) || {};
+        this.construct_container();
+        this.get_month();
     },
     methods: {
-        get_key_for_data(key, date,click) {
-            var months = { "Jan": 0, "Feb": 1, "Mar": 2, "Apr": 3, "May": 4, "Jun": 5, "Jul": 6, "Aug": 7, "Sep": 8, "Oct": 9, "Nov": 10, "Dec": 11 };
-            var year =  key.split('_')[1];
-            var month = key.split('_')[0].toLowerCase();
-            month = month.charAt(0).toUpperCase() + month.slice(1).toLowerCase();
-            var timestamp = new Date(year,months[month],date).getTime();
-            click ?(this.$emit('change_left_pane',year,month,date)):'';
-            return this.content[timestamp];
+        construct_container(){
+            var res = [], 
+            keys =  Object.keys(this.container_data).sort((a, b) => b - a);
+            var month = ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'];
+            this.content_data = this.content_data || {};
+            if (keys.length > 0) {
+                var prev_date = new Date(parseInt(keys[0])), prev = month[prev_date.getMonth()] + ' ' + prev_date.getFullYear();
+                for (var i = 0; i < keys.length; i++) {
+                    var date = new Date(parseInt(keys[i]));
+                    if (date.getMonth() == prev_date.getMonth() && date.getFullYear() == prev_date.getFullYear()) {
+                        res.push(date.getDate());
+                    } else {
+                        this.content_data[prev] = res;
+                        res = [date.getDate()];
+                        prev = month[date.getMonth()] + ' ' + date.getFullYear();
+                        prev_date = date;
+                    }
+                }
+                if (res.length != 0) this.content_data[prev] = res;
+            }
         },
-        get_month(key){
-            return key.split('_')[0];
+        get_month(){
+            for(var key in this.content_data){
+                this.month.push(key);
+            }
         },
-        get_year(key){
-            var year = key.split('_')[1];
-            return parseInt(year);
+        get_year_month(key,year){
+            var key_split = key.split(' ');
+            return year == undefined ?key_split[0]: parseInt(key_split[1])
         },
-        get_date(val){
-            return parseInt(val);
+        get_data(key,date){
+            var months = ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'];
+            var key_split= key.split(' ');
+            var month = key_split[0];
+            var year =parseInt(key_split[1]);
+            var dat1= new Date(year,months.indexOf(month),date).getTime();
+            return this.container_data[dat1];
         },
-        split_name_for_head(name){
-            var string =name.split('_');
-            return string[0]+' '+string[1];
+        open_diary(data){
+            this.$emit('open_diary',data);
         }
 
-    }
+    },
 }

@@ -1,29 +1,30 @@
+
 var button_component = {
-    template:`<div class="button-root">
-                <div class="button" :class="{ active: active === icon_name }" @click="button_clicked">
-                    <span class="material-symbols-outlined" v-if="icon_name">{{ icon_name }}</span>
-                    <span>{{ button_name }}</span>
-               </div>
-              </div>`,
-    props:{
-        button_name:{
-            type : String
+    template: `
+        <div class="listitem-root">
+            <div class="button" :class="{ active: highlight }" @click="button_clicked">
+                <span class="material-symbols-outlined" v-if="icon_name">{{ icon_name }}</span>
+                <span>{{ button_name }}</span>
+            </div>
+        </div>
+    `,
+    props: {
+        button_name: {
+            type: String
         },
-        icon_name:{
-            type:String
+        icon_name: {
+            type: String
         },
-        active:{
-            type:[String,Number]
+        highlight: {
+            type: Boolean
         },
-        root_ref:{
-            type:Object
-        }
+        root_ref: {
+            type: Object
+        },
     },
-    emits:['button_clicked'],
-    methods:{
-        button_clicked(){
-            this.root_ref.eventbus.open_favourite(this.icon_name);
+    methods: {
+        button_clicked() {
+            this.$emit('button_clicked', this.icon_name);
         }
     }
-    
-}
+};

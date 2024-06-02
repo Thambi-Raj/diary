@@ -1,237 +1,86 @@
-<!DOCTYPE html>
-<html lang="en">
-
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <link rel="stylesheet"
-        href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@20..48,100..700,0..1,-50..200" />
-    <script src="
-        https://cdn.jsdelivr.net/npm/vue@3.4.21/dist/vue.global.min.js
-        "></script> 
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
-    <link rel="stylesheet" href="/fixedHead_dropdown/dropdown.css">
-    <link rel="stylesheet" href="/sidebar/sidebar.css">
-    <link rel="stylesheet" href="/button/button.css">
-    <link rel="stylesheet" href="/search_dropdown/search-dropdown.css">
-    <link rel="stylesheet" href="/calendar/calendar.css">
-    <link rel="stylesheet" href="/container/container.css">
-    <link rel="stylesheet" href="/previewSidebar/previewSidebar.css">
-    <link rel="stylesheet" href="/editor/editor.css">
-    <link rel="stylesheet" href="/dropdown/simpleDropdown.css">
-    <link rel="stylesheet" href="/diary/diary.css">
-    <link rel="stylesheet" href="/preview/preview.css">
-    <script src="https://cdn.jsdelivr.net/npm/mitt/dist/mitt.umd.js"></script>
-    <script src="eventbus.js"></script>
-    <script src="/diary/diary_view.js"></script>
-    <script src="/diary/diary_controller.js"></script>
-    <script src="/fixedHead_dropdown/dropdown_view.js"></script>
-    <script src="/fixedHead_dropdown/dropdown_controller.js"></script>
-    <script src="/button/button_view.js"></script>
-    <script src="/button/button_controller.js"></script>
-    <script src="/search_dropdown/search-dropdown_view.js"></script>
-    <script src="/search_dropdown/search-dropdown_controller.js"></script>
-    <script src="/sidebar/sidebar_view.js"></script>
-    <script src="/sidebar/sidebar_controller.js"></script>
-    <script src="/calendar/calendar_view.js"></script>
-    <script src="/calendar/calendar_controller.js"></script>
-    <script src="/container/container_view.js"></script>
-    <script src="/container/container_controller.js"></script>
-    <script src="/previewSidebar/previewSidebar_view.js"></script>
-    <script src="/previewSidebar/previewSidebar_controller.js"></script>
-    <script src="/editor/editor_view.js"></script>
-    <script src="/editor/editor_controller.js"></script>
-    <script src="/dropdown/simpleDropdown_view.js"></script>
-    <script src="/dropdown/simpleDropdown_controller.js"></script>
-    <script src="/preview/preview_controller.js"></script>
-    <script src="/preview/preview_view.js"></script>
-</head>
-<body>
-    <div id="root">
-        <div id="header">
-            <div id="left_pane">
-                <span id="icon">DIARY</span>
-            </div>
-        </div>
-        <div id="content">
-            <div class="diary">
-                  <diary-controller
-                  :dropdown_selected="dropdown_selected" 
-                  :dropdown_value = dropdown_value
-                  :default_date=default_date 
-                  :month_preview=month_preview  
-                  :default_date_data="default_date_data"
-                  :favourite_data="favourite_data"
-                  :root_ref="app"
-                  :dropdown_values="dropdown_values"
-                  :right_template = "right_template"
-                  @save_json="save_json"
-                  ></diary-controller>
-                  <event-bus :root="app"></event-bus>
-            </div>
-        </div>
-    </div>
-</body>
-
-
-<script>    
-    const app = Vue.createApp({
-        data() {
+const container_component = {
+    template: `<div id="container-root" v-if="preview"> 
+                    <div id="container-head">
+                        <div id="heading">
+                            <span class="material-symbols-outlined ">{{span}}</span>
+                            <span id="text">{{name}}</span>
+                        </div>
+                    </div>
+                    <div id="container-body">
+                         <div  v-for="(item, index) in content_data" :key="index">
+                           <div id="main_container" v-for="(value, key) in item" :key="key">
+                                <div id="head">
+                                 <span>{{split_name_for_head(key)}}</span>
+                                </div>
+                                <div id="content">
+                                  <div id="sub_container" v-for="val in value" :key="val" @click="get_key_for_data(key, val,'click')">
+                                     <div id="first_div">
+                                        <preview-controller 
+                                            :year="get_year(key)"
+                                            :month="get_month(key)"
+                                            :favourite_data="container_data"
+                                            :data="get_key_for_data(key,val)"
+                                            :date=get_date(val)
+                                            :show_date="false"
+                                            :favourite_access="false"
+                                            :root_ref=root_ref>
+                                        </preview-controller>
+                                        <span id="date">{{val}}</span>
+                                     </div>
+                                  </div>
+                                </div>
+                           </div>
+                         </div>
+                    </div>
+              </div>`
+        ,
+    props: {
+        name: {
+            type: String
+        },
+        span: {
+            type: String
+        },
+        container_data: {
+            type: Object
+        },
+        root_ref:{
+            type:Object
+        }
+    },
+    data() {
         return {
-            dropdown_selected: 2024,
-            dropdown_value: 'Apr',
-            dropdown_values:[],
-            default_date: 1,
-            favourite_data: [],
-            month_preview: this.get_month_preview(2024, "Apr"),
-            default_date_data: {},
-            eventbus:{},
-            app:this,
-            right_template:'calendar',
-           
+            content_data: {},
+            month :[], 
+            preview:true
         }
     },
     created() {
-        this.get_data();
-        this.check_favourite();
-        this.construct_container_format('favourite');
-        this.get_dropdown_values(2024)
+        this.construct_container();
+        this.get_month();
+        console.log(this.content_data);
+        console.log(this.month);
     },
-    emits: ["page_change", "change_dropdown_head", "change_dropdown_value", "change_date", "add_fav", "get_favourite_data"],
     methods: {
-        update_month_preview() {
-            this.month_preview = this.get_month_preview(this.dropdown_selected, this.dropdown_value);
-            console.log(this.month_preview);
-        },
-        construct_container_format() {
-            var data = JSON.parse(localStorage.getItem('favorite'));
-            var result = [];
-            if (data != null) {
-                var keys = Object.keys(data).sort().reverse();
+        construct_container(){
+            var res = [], keys = Object.keys(this.container_data);
+            var month = ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'];
+            this.content_data = this.content_data || {};
+            if (keys.length > 0) {
+                var prev_date = new Date(parseInt(keys[0])), prev = month[prev_date.getMonth()] + ' ' + prev_date.getFullYear();
                 for (var i = 0; i < keys.length; i++) {
-                    var month = Object.keys(data[keys[i]]);
-                    var res = this.month_based_sort(month);
-                    for (var j = 0; j < res.length; j++) {
-                        var get_date = Object.keys(data[keys[i]][res[j]]).sort();
-                        if (get_date.length >= 1) {
-                            var s = res[j] + '_' + keys[i];
-                            var obj = {};
-                            obj[s] = get_date;
-                            result.push(obj);
-                        }
+                    var date = new Date(parseInt(keys[i]));
+                    if (date.getMonth() == prev_date.getMonth() && date.getFullYear() == prev_date.getFullYear()) {
+                        res.push(this.container_data[keys[i]]);
+                    } else {
+                        this.content_data[prev] = res;
+                        res = [this.container_data[keys[i]]];
+                        prev = month[date.getMonth()] + ' ' + date.getFullYear();
+                    prev_date = date;
                     }
                 }
-                this.favourite_data = result;
+                if (res.length != 0) this.content_data[prev] = res;
             }
         },
-        month_based_sort(array) {
-            var month = { "Jan": 0, "Feb": 1, "Mar": 2, "Apr": 3, "May": 4, "Jun": 5, "Jul": 6, "Aug": 7, "Sep": 8, "Oct": 9, "Nov": 10, "Dec": 11 };
-            var index_month = [];
-            var result = [...array];
-            for (var i = 0; i < array.length; i++) {
-                index_month.push(month[array[i]]);
-            }
-            for (var i = 0; i < index_month.length; i++) {
-                for (var j = i + 1; j < index_month.length; j++) {
-                    if (index_month[i] < index_month[j]) {
-                        var temp = index_month[i];
-                        index_month[i] = index_month[j];
-                        index_month[j] = temp;
-                        var temp1 = result[i];
-                        result[i] = result[j];
-                        result[j] = temp1;
-                    }
-                }
-            }
-            return result;
-        },
-        save_json(json, date) {
-            var ref = this;
-            var get_local = !localStorage.getItem("Data") ? {} : JSON.parse(localStorage.getItem("Data"));
-            get_local[this.dropdown_selected] = get_local[this.dropdown_selected] || {};
-            get_local[this.dropdown_selected][this.dropdown_value] = get_local[this.dropdown_selected][this.dropdown_value] || {};
-            get_local[this.dropdown_selected][this.dropdown_value][date] = { ...json };
-            setTimeout(() => {
-                localStorage.setItem("Data", JSON.stringify(get_local));
-                ref.update_month_preview()
-            }, 100);
-        },
-        add_fav(date) {
-            var check = this.check_favourite(date);
-            var get_local = !localStorage.getItem("favorite") ? {} : JSON.parse(localStorage.getItem("favorite"));
-            if (check) {
-                delete get_local[this.dropdown_selected][this.dropdown_value][date];
-            }
-            else {
-                get_local[this.dropdown_selected] = get_local[this.dropdown_selected] || {};
-                get_local[this.dropdown_selected][this.dropdown_value] = get_local[this.dropdown_selected][this.dropdown_value] || {};
-                get_local[this.dropdown_selected][this.dropdown_value][date] = true;
-            }
-            localStorage.setItem("favorite", JSON.stringify(get_local));
-            this.construct_container_format('favorite');
-            this.total_favourite = { ...get_local }
-        },
-        get_data() {
-            var get_local = !localStorage.getItem("Data") ? {} : JSON.parse(localStorage.getItem("Data"));
-            var condition = get_local
-                && get_local[this.dropdown_selected] &&
-                get_local[this.dropdown_selected][this.dropdown_value]
-                && get_local[this.dropdown_selected][this.dropdown_value][this.default_date];
-            this.default_date_data = condition ? condition : {};
-        },
-        check_favourite(date) {
-            var get_local = !localStorage.getItem("favorite") ? {} : JSON.parse(localStorage.getItem("favorite"));
-            this.total_favourite = get_local;
-            var condition = get_local
-                && get_local[this.dropdown_selected] &&
-                get_local[this.dropdown_selected][this.dropdown_value]
-                && get_local[this.dropdown_selected][this.dropdown_value][date];
-            if (condition) {
-                return true;
-            }
-            return false;
-        },
-        get_month_preview(year, month) {
-            var get_local = !localStorage.getItem("Data") ? {} : JSON.parse(localStorage.getItem("Data"));
-            var condition = get_local
-                && get_local[year] &&
-                get_local[year][month];
-            return condition ? get_local[year][month] : {};
-        },
-        get_dropdown_values(name){
-            var month = ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec']
-            var cur = new Date().getFullYear();
-            var mon = new Date().getMonth();
-            this.dropdown_values = cur == name ? month.slice(0, mon + 1) : month;
-        },
-        
     },
-    })
-    app.component('event-bus',event_bus)
-    app.component('dropdown-root', dropdown_component);
-    app.component('dropdown-controller', dropdown_controller);
-    app.component('button-root', button_component);
-    app.component('button-controller', button_controller);
-    app.component('search-btn-root', search_button_component);
-    app.component('search-btn-controller', search_button_controller);
-    app.component('sidebar-root', sidebar_component);
-    app.component('sidebar-controller', sidebar_controller);
-    app.component('calendar-root', calendar_component);
-    app.component('calendar-controller', calendar_controller);
-    app.component('container-root', container_component)
-    app.component('container-controller', container_controller);
-    app.component('previewSidebar-root', previewSidebar_component)
-    app.component('previewSidebar-controller', previewSidebar_controller);
-    app.component('editor-controller', editor_controller);
-    app.component('editor-root', editor_component);
-    app.component('simple-dropdown-root', simple_dropdown_component);
-    app.component('simple-dropdown-controller', simple_dropdown_controller);
-    app.component('diary-component', diary_component);
-    app.component('diary-controller',diary_controller)
-    app.component('preview-controller',preview_controller)
-    app.component('preview-root',preview_component)
-    const vm = app.mount('.diary');
-</script>
-
-
-</html>
+}

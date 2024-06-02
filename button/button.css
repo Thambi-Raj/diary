@@ -1,4 +1,4 @@
-.button-root>.button{
+.listitem-root>.button{
 color: #bcbcbc;
 display: flex;
 align-items: center;
@@ -7,15 +7,15 @@ height: 2.5vw;
 padding-left: 0.7vw;
 cursor: pointer;
 }
-.button-root>.button >.material-symbols-outlined:first-child{
+.listitem-root>.button >.material-symbols-outlined:first-child{
 width: 15%;
 font-size: 1vw;
 margin-top: 0.1vw;
 }
-.button-root>.button:hover {
+.listitem-root>.button:hover {
     background-color: #54719112;
 }
-.button-root>.active{
+.listitem-root>.active{
     background-color: #54719112;
     border-radius: 0px 15px 15px 0px;
 }

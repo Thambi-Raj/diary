@@ -1,38 +1,35 @@
 var button_controller = {
     template: `
-            <button-root 
-            :button_name="button_name" 
-            :icon_name="icon_name"
-            @button_clicked="button_clicked" 
-            :active="active"
+        <listitem-root 
+            :button_name="name" 
+            :icon_name="prepend_icon"
+            :highlight="active"
             :root_ref="root_ref"
-            :drop_down=show_drop>
-            </button-root>
+            @button_clicked="button_clicked">
+        </listitem-root>
     `,
     props: {
-        button_name: {
+        name: {
             type: String
         },
-        icon_name: {
+        prepend_icon: {
             type: String
-        }
-        ,
-        active:{
-            type:[String,Number]
         },
-        root_ref:{
+        active: {
+            type: Boolean
+        },
+        root_ref: {
+            type: Object
+        },
+        root_events:{
             type:Object
         }
     },
-    data() {
-        return {
-            show_drop:this.active ===this.id
-        }
-    },
-    emits:['change_active'],
     methods: {
-        button_clicked(template,name) {
-            this.$emit('change_active',name,template);
+        button_clicked(name) {
+            (this.root_ref && this.root_events.click) 
+                ? this.root_ref.eventbus[this.root_events.click](name)
+                : this.$emit('button_clicked',name);       
         }
     }
-}
+};

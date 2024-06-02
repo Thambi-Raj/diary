@@ -42,7 +42,7 @@ const previewSidebar_component = {
             type:Object
         },
         favourite_data:{
-            type:Array
+            type:Object
         },
         root_ref:{
             type:Object
@@ -77,14 +77,3 @@ const previewSidebar_component = {
 }
 
 
-{/* <div id="drop-down">
-<div id="drop-down-head" @click="show_drop('b')">
-   <span>{{year2}}</span>
-   <span class="material-symbols-outlined" >arrow_drop_down</span>
-</div>
-<div id="option" v-show="year_drop">
-   <span v-for = "yea in year" @click = "change_drop(1,yea)">
-       {{yea}}
-   </span>
-</div>
-</div> */}

@@ -27,7 +27,7 @@ const previewSidebar_controller = {
       type: Object
     },
     favourite_data: {
-      type: Array
+      type: Object
     },
   },
   data() {
@@ -57,7 +57,9 @@ const previewSidebar_controller = {
 
   methods: {
     change_value(year,month) {
-      this.root_ref.eventbus.open_calendar(year,month,'editor');
+                      (this.root_ref && this.root_ref.root_events.includes("open_calendar")) 
+                    ?  this.root_ref.eventbus.open_calendar(year,month,'editor')
+                    :  this.$emit('open_calendar',year,month);
     },
   },
 }

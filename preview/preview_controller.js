@@ -1,13 +1,11 @@
 const preview_controller = {
     template: `<preview-root
                     :show_date="show_date"
-                    :favourite_access="favourite_access"
-                    :data="check_available_data()"
-                    :favourite_data="favourite_data"
-                    :date="date"
-                    :month="month"
-                    :year="year"
-                    :root_ref="root_ref"
+                    :data="check_available_data(data)"
+                    :favourite="favourite"
+                    :date="date_config.date"
+                    :month="date_config.month"
+                    :year="date_config.year"
                     @add_to_fav="add_fav"
                     @change_data="change_data"
                 ></preview-root>`,
@@ -16,46 +14,41 @@ const preview_controller = {
             type: Boolean,
             default: false
         },
-        favourite_access: {
-            type: Boolean,
-            default: false
+        favourite:{
+            type:[Object,Boolean],
+            default:false
         },
-        data: {
-            type: Object,
-            default: {}
+        date_config:{
+            type:Object
         },
-        favourite_data: {
-            type: Array,
-            default: {}
+        root_ref:{
+            type:[Object,Boolean],
+            default:false
         },
-        date: {
-            type: [Number, String],
-            default: 0
+        root_event:{
+            type:[Object,Boolean],
+            default:false
         },
-        month: {
-            type: String,
-            default: 'Jan'
-        },
-        year: {
-            type: [String, Number],
-            default: 2024
-        },
-        root_ref: {
-            type: Object
-        },
+        data:{
+            type:Object
+        }
     },
     methods: {
-        check_available_data() {
-            if (Object.keys(this.data).length === 0) {
-                return false;
-            }
-            return this.data;
+        check_available_data(data) {
+          if(data){
+            return data;
+          }
+          return false;
         },
         add_fav(date) {
-            this.root_ref.eventbus.add_to_favourite(date); 
+            this.root_ref && this.root_event.add_to_fav 
+                ? this.root_ref.eventbus[this.root_event.add_to_fav](date)
+                : this.$emit('change_data',date);
         },
         change_data(data) {
-            this.root_ref.eventbus.open_diary(data);
+            this.root_ref && this.root_event.click 
+                ? this.root_ref.eventbus[this.root_event.click](data)
+                : this.$emit('change_data',data);
         }
     }
 };

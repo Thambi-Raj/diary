@@ -1,7 +1,7 @@
 .drop-down-root{ 
-    width: fit-content;
     position: relative;
     font-size: .7vw;
+    width: 100%;
 }
 .drop-down-root>span:not(.material-symbols-outlined){
     font-size: .8vw;
@@ -12,19 +12,13 @@
 .drop-down-root>.small_width_dropdown{
     width: 3vw !important;
 }
-.drop-down-root>.font_size_width{
-    width: 3.3vw !important;
-}
-.drop-down-root>.font_size_width_dropdown{
-    width: 3.3vw !important;
-}
+
 .drop-down-root>.normal_width_dropdown>span{
     padding: 0.3vw .5vw !important;
     text-align: left !important;
 }
 .drop-down-root>#drop-down-head {
     display: flex;
-    width: max-content;
     height: 1.8vw;
     align-items: center;
     border: 1px solid #cbcbcb;
@@ -32,6 +26,7 @@
     padding: .4vw;
     position: relative;
     cursor: pointer;
+    width: 100%;
 }
 .drop-down-root>#drop-down-head>span:last-child{
     position: absolute;
@@ -70,6 +65,7 @@
     max-height:10vw;
     overflow: auto;
     overflow-x: hidden;
+    width: 100%;
 }
 .drop-down-root>#option::-webkit-scrollbar {
     width: 5px;  
