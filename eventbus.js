@@ -15,34 +15,41 @@ const event_bus = {
     methods: {
         add_to_fav(date){
             this.root.add_fav(date);
+            this.root.get_Favourite_data();
         },
         open_editor_view(json){
-            this.root.selected = json['year']
-            this.root.month =   json['month']
-            this.root.date   =  json['date']
-            this.root.diary_setup_data.selected = json['year'];
-            this.root.diary_setup_data.month = json['month'];
-            this.root.diary_setup_data.date = json['year'];
+            this.root.config_details.selected = json['year'];
+            this.root.config_details.month = json['month'];
+            this.root.config_details.date = json['date'];
             this.root.right_pane = 'editor';
             this.root.get_data();
+            this.root.get_month_preview();
+
         },
         open_favourite_view(name){
-            this.root.selected = name;
-            this.root.diary_setup_data.selected = name;
+            this.root.config_details.selected = name;
             this.root.right_pane='container';
         },
-        open_calendar_view(data){
-            data['year']?(this.root.selected = data.year , this.root.diary_setup_data.selected = data['year']):'';
-            data['month']?(this.root.month = data.month , this.root.diary_setup_data.month = data['month']):'';
-            this.root.get_dropdown_values()
-            this.root.update_month_preview();
-            if(data['view']== undefined){
+        open_calendar_view(json){
+            this.root.config_details.selected = json['year'] 
+            this.root.get_dropdown_values();
+            this.check_for_set_month(json);
+            this.root.total_days_in_month();
+            this.root.get_month_preview();
+            if(json['view']== undefined){
                 this.root.right_pane  ='calendar';
             }
-            this.root.get_data();
         },
         save_content(json,date){
             this.root.save_json(json,date);
+        },
+        check_for_set_month(json){
+            if(!this.root.months.includes(this.root.config_details.month)){
+                this.root.config_details.month='Jan';
+            }
+            else{
+                this.root.config_details.month = json['month'];
+            }
         }
     }
 }

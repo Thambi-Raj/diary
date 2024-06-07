@@ -1,20 +1,23 @@
 const calendar_controller = {
     template: `<calendar-root 
-                    :month=data.month
-                    :year =data.year 
+                    :month=date_config.month
+                    :year =date_config.year 
                     :root_ref="root_ref"
-                    :month_preview = data.month_preview
+                    :month_data = month_data
                     @open_diary="open_diary"
                     >
                </calendar-root>`,
     props: {
-        data:{
+        date_config:{
             type:Object
         },
         root_ref: {
             type: Object
         },
         root_event:{
+            type:Object
+        },
+        month_data:{
             type:Object
         }
     },

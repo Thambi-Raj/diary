@@ -43,7 +43,7 @@ const editor_component = {
                 </div>
                 <div id="right"> 
                  <div id="date">
-                   <span>Wed</span>
+                   <span>{{day}}</span>
                  </div>
                  <div id="month">
                   <span>{{month}}&nbsp;{{date}} ,&nbsp;{{year}}</span>
@@ -104,6 +104,8 @@ const editor_component = {
                 'i': 'italic',
                 'u': 'underline',
             },
+            months:['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'],
+            days :["Sun", "Mon", "Tue", "Wed", "Thu", "Fri", "Sat"],
             font_tag_length: -1,
             images_url: [],
             back_ground: '',
@@ -112,7 +114,8 @@ const editor_component = {
             drag_container_class:'',
             wordPad_class:'',
             image_full_view_class:'hide', 
-            height:''
+            height:'',
+            day:'',
         };
     },
 
@@ -152,6 +155,7 @@ const editor_component = {
         this.check_for_draft();
         this.check_for_preview();
         this.images_url =this.image; 
+        this.day =this.days[new Date(this.year,this.months.indexOf(this.month),this.date).getDay()];
     },
     watch: {
         date(){
@@ -161,6 +165,7 @@ const editor_component = {
                 this.$refs.image.removeAttribute('style');
             }
             this.height='';
+            this.day =this.days[new Date(this.year,this.months.indexOf(this.month),this.date).getDay()];
         },
         data() {
             this.check_for_draft();
@@ -295,32 +300,23 @@ const editor_component = {
                 h = h.parentElement;
             }
         },
-        start_drag_event(ev) {
-            var prev = ev.screenX;
+        start_drag_event() {
             const mousemoveHandler = (e) => {
-                prev = this.drag_move(prev, e.clientX, e.currentTarget);
+              this.drag_move( e.clientX, e.currentTarget);
             };
             const mouseupHandler = () => {
                 this.$refs.editor_width.removeEventListener('mousemove', mousemoveHandler);
                 this.$refs.editor_width.removeEventListener('mouseup', mouseupHandler);
             };
             this.$refs.editor_width.addEventListener('mousemove', mousemoveHandler);
-            this.$refs.editor_width.addEventListener('mouseup', mouseupHandler);
-           
+            this.$refs.editor_width.addEventListener('mouseup', mouseupHandler);   
         },
-        drag_move(prev, result_x, target) {
-            const background = this.$refs.back_ground.getBoundingClientRect();
-            if (prev > result_x) {
-                result_x += (2 / 100) * background.width;
-            }
-            else {
-                result_x -= (2 / 100) * background.width;
-            }
+        drag_move( result_x, target) {
             this.minimum_width_imageContainer(result_x, target);
-            return result_x;
         },
         minimum_width_imageContainer(result_x, target) {
             background= this.$refs.back_ground.getBoundingClientRect();
+            console.log(target);
             var parent_width = target.clientWidth;
             const content = this.$refs.content;
             const image = this.$refs.image;

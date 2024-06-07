@@ -1,4 +1,4 @@
-var dropdown_controller = {
+var expandable_list_controller = {
     template: `<div :class="expand ? 'section clicked' : 'section' "  > 
                     <expandable-list-root  
                         :icon=prepend_icon 
@@ -38,7 +38,7 @@ var dropdown_controller = {
         change_value(data){
             this.root_ref && this.root_events.change 
                 ? this.root_ref.eventbus[this.root_events.change](data)
-                : this.$emit('dropdown_clicked',data);
+                : this.$emit('changed',data);
         },
         
     }           

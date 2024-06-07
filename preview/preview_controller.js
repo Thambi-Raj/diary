@@ -9,6 +9,7 @@ const preview_controller = {
                     @add_to_fav="add_fav"
                     @change_data="change_data"
                 ></preview-root>`,
+   
     props: {
         show_date: {
             type: Boolean,
@@ -33,6 +34,7 @@ const preview_controller = {
             type:Object
         }
     },
+    emits:['add_to_favourite','date_changed'],
     methods: {
         check_available_data(data) {
           if(data){
@@ -43,12 +45,12 @@ const preview_controller = {
         add_fav(date) {
             this.root_ref && this.root_event.add_to_fav 
                 ? this.root_ref.eventbus[this.root_event.add_to_fav](date)
-                : this.$emit('change_data',date);
+                : this.$emit('add_to_favourite',date);
         },
         change_data(data) {
             this.root_ref && this.root_event.click 
                 ? this.root_ref.eventbus[this.root_event.click](data)
-                : this.$emit('change_data',data);
+                : this.$emit('date_changed',data);
         }
     }
 };

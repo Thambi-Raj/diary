@@ -10,9 +10,9 @@
         https://cdn.jsdelivr.net/npm/vue@3.4.21/dist/vue.global.min.js
         "></script>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
-    <link rel="stylesheet" href="/fixedHead_dropdown/dropdown.css">
+    <link rel="stylesheet" href="/expandable-list/expandable-list.css">
     <link rel="stylesheet" href="/sidebar/sidebar.css">
-    <link rel="stylesheet" href="/button/button.css">
+    <link rel="stylesheet" href="/listitem/listitem.css">
     <link rel="stylesheet" href="/search_dropdown/search-dropdown.css">
     <link rel="stylesheet" href="/calendar/calendar.css">
     <link rel="stylesheet" href="/container/container.css">
@@ -27,10 +27,10 @@
     <script src="diaryListQuery.js"></script>
     <script src="/diary/diary_view.js"></script>
     <script src="/diary/diary_controller.js"></script>
-    <script src="/fixedHead_dropdown/dropdown_view.js"></script>
-    <script src="/fixedHead_dropdown/dropdown_controller.js"></script>
-    <script src="/button/button_view.js"></script>
-    <script src="/button/button_controller.js"></script>
+    <script src="/expandable-list/expandable-list_view.js"></script>
+    <script src="/expandable-list/expandable-list_controller.js"></script>
+    <script src="/listitem/listitem_view.js"></script>
+    <script src="/listitem/listitem_controller.js"></script>
     <script src="/search_dropdown/search-dropdown_view.js"></script>
     <script src="/search_dropdown/search-dropdown_controller.js"></script>
     <script src="/sidebar/sidebar_view.js"></script>
@@ -47,8 +47,8 @@
     <script src="/dropdown/simpleDropdown_controller.js"></script>
     <script src="/preview/preview_controller.js"></script>
     <script src="/preview/preview_view.js"></script>
+    <script src="utility.js"></script>
 </head>
-
 <body>
     <div id="root">
         <div id="header">
@@ -58,83 +58,48 @@
         </div>
         <div id="content">
             <div class="diary">
-                <div id="left-container-root">
-                    <div id="calendar-side-bar"  v-if="right_pane !== 'editor'" >
-                            <expandable-list-controller
-                                v-for="(name, index) in  leftpane_listitem"
-                                    :prepend_icon="'clinical_notes'"
-                                    :name="name"
-                                    :expand="diary_setup_data.selected==name"
-                                    :items="diary_setup_data.months"
-                                    :selected_item="diary_setup_data.month"
-                                    :root_ref="root_reference"
-                                    :root_events="root_events.duration"
-                            ></expandable-list-controller>
-                            <listitem-controller
-                                :prepend_icon="'favorite'" 
-                                :name="'Favourites'" 
-                                :active="diary_setup_data.selected=='favorite'"
-                                :root_events="root_events.favourite"
-                                :root_ref="root_reference">
-                            </listitem-controller>
-                    </div>
-                    <div class="content-sidebar" v-else = "right_pane == 'editor'" id="c-sidebar">
-                            <div id="head"> 
-                               <div id="content">
-                                    <div id="month_dropdown">
-                                        <dropdown-controller 
-                                            :selected="diary_setup_data.month"
-                                            :data="diary_setup_data.months" 
-                                            @change = "month_change"
-                                        >
-                                        </dropdown-controller>
-                                    </div>
-                                    <div id="year_dropdown">
-                                        <dropdown-controller 
-                                            :selected="diary_setup_data.selected" 
-                                            :data="leftpane_listitem"
-                                            @change="year_change" 
-                                        >
-                                    </dropdown-controller>
-                                    </div>
-                               </div>
-                             </div>
-                            <div id="body" ref="scroll_container" >
-                                <div id="day-container" v-for="date in diary_setup_data.total_days" :key="date" :class="{ active: date === this.date }" >
-                                <preview-controller 
-                                    :date_config = "set_date_config(date)"
-                                    :data="diary_setup_data.preview[date]"
-                                    :favourite="{acess:true,data:diary_setup_data.favourite_data}"
-                                    :show_date="true"
-                                    :root_ref="root_reference"
-                                    :root_event="root_events.preview">
-                                </preview-controller>
-                                </div>
-                            </div>
-                    </div>
-                </div>
-                <div id="right-container-root">
-                <calendar-controller v-if="right_pane === 'calendar'" 
-                        :data="setDataToCalendar()"
+                <div id="left-pane">
+                    <sidebar-controller v-if="right_pane !== 'editor'"
+                        :leftpane_listitem = "leftpane_listitem"
+                        :config_details = "config_details"
+                        :list_values = "months"
+                        :root_ref = "root_reference"
+                        :root_event = "root_events.side_pane"
+                    ></sidebar-controller>
+                    <preview-sidebar-controller v-else
+                        :date_config="config_details"
+                        :months="months"
+                        :years="leftpane_listitem"
+                        :month_data="month_data"
+                        :favourite_data="Favourite_data" 
                         :root_ref="root_reference"
-                        :root_event="root_events.calendar">
+                        :root_event="root_events.preview_side_pane"
+                    ></preview-sidebar-controller>
+                </div>
+                <div id="right-pane">
+                <calendar-controller v-if="right_pane === 'calendar'" 
+                        :date_config="set_date_config()"
+                        :month_data= "month_data"
+                        :root_ref="root_reference"
+                        :root_event="root_events.calendar"
+                >
                 </calendar-controller>
                 <editor-controller v-if= "right_pane === 'editor'"
-                        :date_config="set_date_config(this.date)"
+                        :date_config="set_date_config( this.config_details.date)"
                         :data="data"
-                        :back="previous_right_pane"   
+                        :back_to="previous_right_pane"   
                         :root_ref="root_reference"
                         :root_event=root_events.diary
-                        >
+                >
                 </editor-controller>
                 <container-controller  v-if ="right_pane === 'container'"
                         :header="{name:'Favourites',icon:'favorite'}"
-                        :data="diary_setup_data.favourite_data"
+                        :data="Favourite_data"
                         :root_ref="root_reference"
                         :root_event="root_events.calendar">
                 </container-controller>
                 </div>
-                <event-bus :root="root_reference"></event-bus>
+                <event_bus :root="root_reference"></event_bus>
             </div>
         </div>
     </div>
@@ -146,12 +111,16 @@
         data() {
             return {
                 leftpane_listitem:[2024,2023],
-                diary_setup_data:{selected:2024,month:'Apr',date:1,months:[],favourite_data:{},preview:{},total_days:0},
-                data: {},
+                config_details:{selected:2024,month:'Apr',date:1,total_days:30},
+                months:[],
+                month_data:{},
+                Favourite_data:{},
+                data : {},
                 eventbus: {},
                 right_pane: 'calendar',
                 previous_right_pane:'calendar',
                 diaryList_Obj: null,
+                utility:null,
                 diary_List: {},
                 root_reference: this,
                 root_events:{
@@ -160,20 +129,20 @@
                             back_to_favourite:'open_favourite',
                             back_to_calendar:'open_calendar'
                         },
-                        preview : {
+                        side_pane:{
+                            duration_change : 'open_calendar',
+                            favourite_click : 'open_favourite'
+                        },
+                        preview_side_pane:{
+                            duration_change : 'open_calendar',
                             add_to_fav:'add_to_favourite',
-                            click:'open_diary'
+                            preview_click:'open_diary'
                         },
                         calendar : {
                             click:'open_diary'
                         },
-                        duration:{
-                            change:'open_calendar'
-                        },
-                        favourite:{
-                            click:'open_favourite'
-                        }
-                }
+                },
+                all:app
             }
         },
         watch:{
@@ -181,114 +150,70 @@
                 if(current =='editor' && old == 'container'){
                     this.previous_right_pane = 'container';
                 }
-                else{
-                    this.previous_right_pane = 'calender';
-                }
-            },
+                console.log(app._context.components);
+            }, 
         },
         created() {
-            this.diaryList_Obj = new DiaryListQuery(JSON.parse(localStorage.getItem('Data1')))
+            this.diaryList_Obj = new DiaryListQuery();
             this.diary_List = this.diaryList_Obj.getDiaryList();
-            this.get_content_for_favourite();
-            this.get_data();
+            this.utility = new Utility();
             this.get_dropdown_values(2024);
-            this.update_month_preview();
+            this.get_month_preview();
             this.total_days_in_month();
+            this.get_Favourite_data();
+            console.log('aaa');
+            console.log(app._context.components);
         },
         methods: {
-            update_month_preview() {
-                this.month_preview = this.get_month_preview(this.selected, this.month);
+            get_month_preview() {
+                var month_data = this.diaryList_Obj.getMonthData(this.config_details.selected, this.config_details.month);
+                this.month_data = month_data;
             },
+
             save_json(json, date) {
                     var ref = this;
-                    var timestampData = localStorage.getItem("Data1") ? JSON.parse(localStorage.getItem("Data1")) : {};
-                    timestampData[this.get_timestamp(date)] = { ...json };
                     setTimeout(() => {
-                        localStorage.setItem("Data1", JSON.stringify(timestampData));
-                        ref.diaryList_Obj.updateDiary(this.get_timestamp(date), json);
-                        ref.update_month_preview();
+                        ref.diaryList_Obj.updateDiary(this.utility.get_timestamp(this.config_details.selected,this.config_details.month,date), json);
+                        ref.get_month_preview();
                     },100);
             },
-            get_timestamp(date) {
-                var month = { "Jan": 0, "Feb": 1, "Mar": 2, "Apr": 3, "May": 4, "Jun": 5, "Jul": 6, "Aug": 7, "Sep": 8, "Oct": 9, "Nov": 10, "Dec": 11 };
-                var newDate = new Date(this.selected, month[this.month], date);
-                return newDate.getTime();
-            },
+
             add_fav(date) {
-                var check = this.check_favourite(date);
-                var favo_data = !localStorage.getItem("favorite1") ? {} : JSON.parse(localStorage.getItem("favorite1"));
-                var timestramp = this.get_timestamp(date);
-                if (check) {
-                    delete favo_data[timestramp];
-                }
-                else {
-                    favo_data[timestramp] = true;
-                }
-                localStorage.setItem("favorite1", JSON.stringify(favo_data));
-                this.get_content_for_favourite()
+                var timestramp = this.utility.get_timestamp(this.config_details.selected,this.config_details.month,date); 
+                this.diaryList_Obj.updateFavouriteData(timestramp);
             },
+            get_Favourite_data(){
+                this.Favourite_data = this.diaryList_Obj.getFavouriteData();
+            },
+
             get_data() {
-                var timestamp = this.get_timestamp(this.date);
+                var timestamp = this.utility.get_timestamp(this.config_details.selected,this.config_details.month, this.config_details.date);
                 this.data = this.diaryList_Obj.currentDateData(timestamp);
             },
-            check_favourite(date) {
-                var favo_data = !localStorage.getItem("favorite1") ? {} : JSON.parse(localStorage.getItem("favorite1"));
-                var timestamp = this.get_timestamp(date);
-                if (favo_data[timestamp] == undefined) {
-                    return false;
-                }
-                return true;
-            },
-            get_month_preview(year, month) {
-                var month_data = this.diaryList_Obj.getMonthData(year, month);
-                this.diary_setup_data.preview = this.diaryList_Obj.getMonthData(this.diary_setup_data.selected, this.diary_setup_data.month);
-                return month_data;
-            },
-           
+
             get_dropdown_values() {
-                var  months = ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'];
-                var cur = new Date().getFullYear();
-                var mon = new Date().getMonth();
-                this.diary_setup_data.months = cur == this.diary_setup_data.selected ? months.slice(0, mon + 1) : months;
+                this.months = this.utility.get_months(this.config_details.selected);
             },
-            get_content_for_favourite(){
-                var data = this.diary_List;
-                var favo_data = !localStorage.getItem("favorite1") ? {} : JSON.parse(localStorage.getItem("favorite1"));
-                this.favourite_data ={} ;
-                for(var key in favo_data){
-                    this.diary_setup_data.favourite_data[key]=data[key];
-                    this.favourite_data[key] = data[key];
-                }
-            },
+
             total_days_in_month(){
-                var  months = ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'];  
-                var month = months.indexOf(this.month);
-                this.diary_setup_data.total_days = new Date(this.diary_setup_data.selected, month + 1, 0).getDate();
-                this.days_in_month = new Date(this.selected, month + 1, 0).getDate();
+                this.config_details.total_days = this.utility.total_days_in_month(this.config_details.selected,this.config_details.month);
             },
             set_date_config(date){
-                var data = {year:this.diary_setup_data.selected,month:this.diary_setup_data.month,date:date,data}
+                var data = {
+                            year:this.config_details.selected,
+                            month:this.config_details.month,
+                            date:date,
+                        }
                 return data;
             },
-            setDataToCalendar(){
-                var data ={year:this.diary_setup_data.selected,month:this.diary_setup_data.month,month_preview:this.diary_setup_data.preview} 
-                return data;
-            },
-            year_change(year){
-                var data={year:year,month:'Jan',view:'editor'};
-                this.eventbus[this.root_events.duration.change](data);
-            },
-            month_change(value){
-                var data={year:this.diary_setup_data.selected,month:value,view:'editor'};
-                this.eventbus[this.root_events.duration.change](data);
-            }
         },
+       
     })
-    app.component('event-bus', event_bus)
-    app.component('expandable-list-root', dropdown_component);
-    app.component('expandable-list-controller', dropdown_controller);
-    app.component('listitem-root', button_component);
-    app.component('listitem-controller', button_controller);
+    app.component('event_bus', event_bus)
+    app.component('expandable-list-root', expandable_list_component);
+    app.component('expandable-list-controller', expandable_list_controller);
+    app.component('listitem-root', listitem_component);
+    app.component('listitem-controller', listitem_controller);
     app.component('search-btn-root', search_button_component);
     app.component('search-btn-controller', search_button_controller);
     app.component('sidebar-root', sidebar_component);
@@ -297,8 +222,8 @@
     app.component('calendar-controller', calendar_controller);
     app.component('container-root', container_component)
     app.component('container-controller', container_controller);
-    app.component('previewSidebar-root', previewSidebar_component)
-    app.component('previewSidebar-controller', previewSidebar_controller);
+    app.component('preview-sidebar-root', previewSidebar_component)
+    app.component('preview-sidebar-controller', previewSidebar_controller);
     app.component('editor-controller', editor_controller);
     app.component('editor-root', editor_component);
     app.component('dropdown-root', simple_dropdown_component);

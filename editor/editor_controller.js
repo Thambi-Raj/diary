@@ -5,12 +5,12 @@ const editor_controller = {
                 :template  = "template"
                 :global_props = "global_props"
                 :preview="preview"
-                :date="date_config.date"
+                :date="data_config.date"
                 :height=height
-                :year="date_config.year"
-                :month="date_config.month"
+                :year="data_config.year"
+                :month="data_config.month"
                 :root_ref="root_ref"
-                :back="back"
+                :back_to="back_to"
                 @save_content="save_content"
                 @back_page="back_page"
                 > 
@@ -20,7 +20,7 @@ const editor_controller = {
             type:Boolean,
             default:true
         },
-        back:{
+        back_to:{
             type:String
         },
         root_ref: {
@@ -35,14 +35,18 @@ const editor_controller = {
         data:{
             type:[Object,Boolean]
         }
+
     },
     
     watch:{
+
         data(){
                 this.template = this.data &&  this.data["contents"]  ?  this.decoded_html_string(this.data["contents"]):'';
                 this.image =  this.data && this.data["images"] ? [...this.data["images"]] :[];
                 this.global_props =  this.data && this.data["global_props"] ? this.data["global_props"] :{};
+                this.data_config     = {...this.date_config};
         },
+        
     },
     data(){
           return{
@@ -53,18 +57,21 @@ const editor_controller = {
             bookmark : true,
             global_props : this.get_global_props(),
             images : this.get_images_array().length,
-            height:''
+            height:'',
+            data_config:this.date_config,
+            date:this.date_config.date,
           }
     },
     methods:{   
             back_page(){
-                if(this.back =='container'){
+                if(this.back_to =='container'){
                     (this.root_ref && this.root_event.back_to_favourite)?
                         this.root_ref.eventbus[this.root_event.back_to_favourite]('favorite')
                         :this.$emit('back_to_favourite');
                 }
                 else{
-                    var data ={year:this.year,month:this.month}; 
+                    console.log(this.data_config);
+                    var data ={year:this.data_config.year,month:this.data_config.month}; 
                     (this.root_ref && this.root_event.back_to_calendar)?
                         this.root_ref.eventbus[this.root_event.back_to_calendar](data)
                         :this.$emit('back_to_calendar');

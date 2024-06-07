@@ -1,17 +1,18 @@
 
-var dropdown_component = {
-    // :icon=icon 
-    // :name='name'
-    // :selected='selected'
-    // :data=" data"
-    // :expand =expand 
-    // @change_value = change_value
+var expandable_list_component = {
     template:`
     <div class="expandable-list-root" >
         <div id="dropdown_head" @click = change_activestate :class=" show ? 'active' : '' " ref="dropdown">
             <span :class = "icon ?'material-symbols-outlined':'hide'">{{icon}}</span>
             <span>{{name}}</span>
-            <span class="material-symbols-outlined drop_down"> {{dropdown_icon}} </span>
+            <span class="material-symbols-outlined drop_down"  v-if="show">
+                arrow_drop_up
+            </span>
+            <span class="material-symbols-outlined drop_down"  v-else>
+                arrow_drop_down
+            </span>
+            
+
         </div>
         <div id="dropdown_body" :class="{ hide: !this.show }" ref="dropdown" v-if="show">
             <div class="dropdown-item" v-for="value in  data" :class="{ selected : value === selected}" @click="change_value(value)">{{value}}</div>
@@ -37,13 +38,11 @@ var dropdown_component = {
     emits:['change_value','change_activestate'],
     data(){
         return {
-            dropdown_icon:this.expand  ? "arrow_drop_up":'arrow_drop_down',
             show:this.expand
         }
     },
     watch:{
         expand(){
-            this.dropdown_icon = this.expand  ? "arrow_drop_up":'arrow_drop_down';
             this.show = this.expand ? true:false;
         }
     },
@@ -53,10 +52,8 @@ var dropdown_component = {
             this.$emit('change_value',data);
         },
         change_activestate(){
-                console.log('aaa');
-                this.dropdown_icon = this.dropdown_icon=="arrow_drop_up" ?"arrow_drop_down":"arrow_drop_up";
                 this.show=!this.show;
-                var data={year:this.name,month:this.data[0]};
+                var data={year:this.name,month:this.selected};
                 this.$emit('change_value',data);
         }
     }

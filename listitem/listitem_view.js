@@ -1,15 +1,15 @@
 
-var button_component = {
+var listitem_component = {
     template: `
         <div class="listitem-root">
             <div class="button" :class="{ active: highlight }" @click="button_clicked">
                 <span class="material-symbols-outlined" v-if="icon_name">{{ icon_name }}</span>
-                <span>{{ button_name }}</span>
+                <span>{{ name }}</span>
             </div>
         </div>
     `,
     props: {
-        button_name: {
+        name: {
             type: String
         },
         icon_name: {
@@ -17,9 +17,6 @@ var button_component = {
         },
         highlight: {
             type: Boolean
-        },
-        root_ref: {
-            type: Object
         },
     },
     methods: {

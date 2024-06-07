@@ -10,6 +10,7 @@ const container_component = {
                         <div v-for="(value, index) in month" :key="index">
                             <div id="head" >
                                 {{value}}
+                                
                             </div>
                             <div id="content">
                                  <div id="container" v-for="(val, i) in content_data[value]" :key="i">

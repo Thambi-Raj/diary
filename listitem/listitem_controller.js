@@ -1,10 +1,9 @@
-var button_controller = {
+var listitem_controller = {
     template: `
         <listitem-root 
-            :button_name="name" 
+            :name="name" 
             :icon_name="prepend_icon"
             :highlight="active"
-            :root_ref="root_ref"
             @button_clicked="button_clicked">
         </listitem-root>
     `,
@@ -29,7 +28,7 @@ var button_controller = {
         button_clicked(name) {
             (this.root_ref && this.root_events.click) 
                 ? this.root_ref.eventbus[this.root_events.click](name)
-                : this.$emit('button_clicked',name);       
+                : this.$emit('clicked',name);       
         }
     }
 };
