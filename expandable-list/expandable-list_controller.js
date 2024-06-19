@@ -1,45 +1,54 @@
 var expandable_list_controller = {
-    template: `<div :class="expand ? 'section clicked' : 'section' "  > 
+    template: `<div :class="isExpand  ? 'section clicked' : 'section'"  > 
                     <expandable-list-root  
-                        :icon=prepend_icon 
-                        :name=name
-                        :selected='selected_item'
-                        :data="items"
-                        :expand =expand 
-                        @change_value = change_value    
-                    >
+                        :prepend_icon=prepend_icon 
+                        :name = name
+                        :selected = selected
+                        :data = "sublist"
+                        :data_count = "data_count"
+                        :expand = expanded 
+                        @updateDropdownValue = updateDropdownValue   
+    
                     </expandable-list-root>
                </div>
         `,
-    props:{
-        prepend_icon:{
-            type:String
+    props: {
+        prepend_icon: {
+            type: String
         },
-        name:{
-            type:[String,Number],
+        name: {
+            type: [String, Number],
         },
-        selected_item:{
-            type: String,
+        selected: {
+            type: [String, Boolean],
         },
-        items:{
+        sublist: {
             type: Array,
         },
-        expand:{
-            type:Boolean
+        isExpand: {
+            type: Boolean
         },
-        root_ref:{
-            type:Object
+        root_ref: {
+            type: Object
         },
-        root_events:{
+        root_events: {
+            type: Object,
+        },
+        data_count:{
             type:Object,
+            default:false
+        }
+    },
+    data() {
+        return {
+            expanded: this.isExpand,
         }
     },
     methods: {
-        change_value(data){
-            this.root_ref && this.root_events.change 
+        updateDropdownValue(data) {
+            this.root_ref && this.root_events.change
                 ? this.root_ref.eventbus[this.root_events.change](data)
-                : this.$emit('changed',data);
+                : this.$emit('changed', data);
         },
-        
-    }           
+    }
 }

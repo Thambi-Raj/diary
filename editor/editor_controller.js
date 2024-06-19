@@ -1,16 +1,16 @@
 const editor_controller = {
     template:`<editor-root  
                 :data      = "data"
-                :image     = "image"  
-                :template  = "template"
-                :global_props = "global_props"
+                :image     = "computedImage"  
+                :template  = "computedTemplate"
+                :global_props = "computedGlobalProps"
                 :preview="preview"
                 :date="data_config.date"
                 :height=height
                 :year="data_config.year"
                 :month="data_config.month"
                 :root_ref="root_ref"
-                :back_to="back_to"
+                :back_to="config.back_to"
                 @save_content="save_content"
                 @back_page="back_page"
                 > 
@@ -20,33 +20,18 @@ const editor_controller = {
             type:Boolean,
             default:true
         },
-        back_to:{
-            type:String
-        },
         root_ref: {
             type: Object
         },
         root_event:{
             type:Object
         },
-        date_config:{
+        config:{
             type:Object,
         },
         data:{
             type:[Object,Boolean]
         }
-
-    },
-    
-    watch:{
-
-        data(){
-                this.template = this.data &&  this.data["contents"]  ?  this.decoded_html_string(this.data["contents"]):'';
-                this.image =  this.data && this.data["images"] ? [...this.data["images"]] :[];
-                this.global_props =  this.data && this.data["global_props"] ? this.data["global_props"] :{};
-                this.data_config     = {...this.date_config};
-        },
-        
     },
     data(){
           return{
@@ -58,19 +43,33 @@ const editor_controller = {
             global_props : this.get_global_props(),
             images : this.get_images_array().length,
             height:'',
-            data_config:this.date_config,
-            date:this.date_config.date,
+            data_config:this.config.date_config,
           }
+    },
+    watch:{
+        data(){
+            this.data_config = { ...this.config.date_config};
+        }
+    },
+    computed: {
+        computedTemplate() {
+            return this.data && this.data["contents"] ? this.decoded_html_string(this.data["contents"]) : '';
+        },
+        computedImage() {
+            return this.data && this.data["images"] ? [...this.data["images"]] : [];
+        },
+        computedGlobalProps() {
+            return this.data && this.data["global_props"] ? this.data["global_props"] : {};
+        },
     },
     methods:{   
             back_page(){
-                if(this.back_to =='container'){
+                if(this.config.back_to =='container'){
                     (this.root_ref && this.root_event.back_to_favourite)?
                         this.root_ref.eventbus[this.root_event.back_to_favourite]('favorite')
                         :this.$emit('back_to_favourite');
                 }
                 else{
-                    console.log(this.data_config);
                     var data ={year:this.data_config.year,month:this.data_config.month}; 
                     (this.root_ref && this.root_event.back_to_calendar)?
                         this.root_ref.eventbus[this.root_event.back_to_calendar](data)
@@ -162,6 +161,7 @@ const editor_controller = {
 
             is_div(content,close,single_line){
                 this.check_for_lineStyle(content , single_line);
+                console.log(content,single_line);
                     if(content.getAttribute('style')){
                         close++;  // 
                     }

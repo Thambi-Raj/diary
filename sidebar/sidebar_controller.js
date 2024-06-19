@@ -1,26 +1,15 @@
 const sidebar_controller= {
     template: `
         <div id="side-pane">
-            <sidebar-root 
-                :leftpane_listitem = "leftpane_listitem" 
-                :config_details=" config_details"  
-                :list_values="list_values"
-                :selected_item="config_details.month"
-                @expand_list_change="expand_list_change"
-                @listitem_clicked="listitem_clicked"
-                >
-            </sidebar-root >
-        </div>
-    `,
+            <main-sidebar-root  
+                :config = "config"  
+                @expand_list_change = "expand_list_change"
+                @listitem_clicked = "listitem_clicked" >
+            </main-sidebar-root >
+        </div>`,
     props: {
-        leftpane_listitem:{
-            type:Object,
-        },
-        config_details:{
+        config:{
             type:Object
-        },
-        list_values:{
-            type:Array
         },
         root_ref: {
             type: Object

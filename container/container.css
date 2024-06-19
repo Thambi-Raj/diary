@@ -13,7 +13,7 @@
     height: 2.4vw;
     width: 100%;
     padding: 1vw;
-    background-color: #e2e2e2ad;
+    background-color: #e2e2e21f;
     border-radius: 5px 5px 0px 0px;
 }
 #container-root > #container-head>#heading{
@@ -27,6 +27,15 @@
 #container-root > #container-head>#heading>span{
     font-size: .9vw;
 }
+#container-root > #container-head>#heading>i{
+    font-size: 1vw;
+    color: #df6a6a;
+}
+#container-root > #container-head>#heading>span{
+    font-size: .85vw;
+    font-weight: bold;
+    color: #666;
+}
 #container-root>#container-body{
     height: calc(100% - 2.4vw );
     overflow: auto;
@@ -39,7 +48,6 @@
 #container-root>#container-body >div{
    width: 100%;
    height: max-content;
-   border: 1px solid #c9c3c357;
    border-radius: 5px ;
 
 }
@@ -49,6 +57,9 @@
     display: flex;
     align-items: center;
     padding-left: 1vw;
+    font-size: .82vw;
+    font-weight: bold;
+    color: #777;
 }
 #container-root>#container-body >div:not(:first-child){
     margin-top: 1vw;
@@ -84,12 +95,17 @@
 }
 #container-root>#container-body >div>#content>#container>#date{
     position: absolute;
-    right: 10%;
-    top: 10%;
-    font-size: .7vw;
-    width: 10%;
+    right: 2%;
+    top: 2%;
+    font-size: 0.65vw;
     z-index: 10;
     background-color: #fff;
     text-align: center;
-    border-radius: 5px;
+    border-radius: 4px;
+    color: #666;
+    width: 1.2vw;
+    height: 1.2vw;
+    display: flex;
+    align-items: center;
+    justify-content: center;
 }

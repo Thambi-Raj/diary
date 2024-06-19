@@ -16,7 +16,7 @@ const preview_component = {
                 <div id="editor" :class="{ 'hide': !data }">                             
                     <editor-controller 
                         :preview="false" 
-                        :date_config="{year:year,month:month,date:date}"
+                        :config="{date_config:{year:year,month:month,date:date}}"
                         :data = "data"
                         :root_ref=root_ref
                     >
@@ -64,15 +64,18 @@ const preview_component = {
         },
         content_click(e, date, event) {
             if (event.srcElement.tagName == 'I' && event.srcElement.classList.contains('fa')) {
-                event.srcElement.classList.contains('fa-heart') ?
-                    (event.srcElement.classList.remove('fa-heart'), event.srcElement.classList.add('fa-heart-o')) :
-                    (event.srcElement.classList.remove('fa-heart-o'), event.srcElement.classList.add('fa-heart'));
-                this.$emit('add_to_fav', date);
+                this.update_favourite_icon(e,date,event);
+                this.$emit('add_to_fav', date);                
             }
             else if (!e.classList.contains('active')) {
                 var data = { 'year': this.year, 'month': this.month, 'date': this.date };
                 this.$emit('change_data', data);
             }
         },
+        update_favourite_icon(e,date,event){
+                event.srcElement.classList.contains('fa-heart') ?
+                    (event.srcElement.classList.remove('fa-heart'), event.srcElement.classList.add('fa-heart-o')) :
+                    (event.srcElement.classList.remove('fa-heart-o'), event.srcElement.classList.add('fa-heart'));
+        }
     }
 }

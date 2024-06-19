@@ -1,8 +1,8 @@
-#preview-side-pane{
+#monthOverview-sideBar{
     width: 100%;
     height: 100%;
 }
-#preview-side-pane>#head{
+#monthOverview-sideBar>#head{
     width: 100%;
     display: flex;
     justify-content: space-around;
@@ -10,33 +10,33 @@
     padding:.7vw;
     height: 3vw;
 }
-#preview-side-pane>#head>#content{
+#monthOverview-sideBar>#head>#content{
     width: 75%;
     height: 100%;
     display: flex;
     justify-content: space-between;
 }
-#preview-side-pane>#head>#content>.drop-down-root:not(:first-child){
+#monthOverview-sideBar>#head>#content>.drop-down-root:not(:first-child){
     width: 45%;
 }
-#preview-side-pane>#head>#content>.drop-down-root:hover{
+#monthOverview-sideBar>#head>#content>.drop-down-root:hover{
     color: #fff;
     border-radius: 5px;
 }
-#preview-side-pane>#head>#content>.drop-down-root>.sidebar-dropdown{
+#monthOverview-sideBar>#head>#content>.drop-down-root>.sidebar-dropdown{
     width: 100% !important;
     border: none;
 }
-#preview-side-pane>#head>#content>.drop-down-root>.sidebar-dropdown>span{
+#monthOverview-sideBar>#head>#content>.drop-down-root>.sidebar-dropdown>span{
     font-size: .8vw;
 }
-#preview-side-pane>#head>#content>.drop-down-root>.sidebar-dropdown>.material-symbols-outlined{
+#monthOverview-sideBar>#head>#content>.drop-down-root>.sidebar-dropdown>.material-symbols-outlined{
     font-size: 1.2vw;
 }
-#preview-side-pane>#head>#content>.drop-down-root>#option>span{
+#monthOverview-sideBar>#head>#content>.drop-down-root>#option>span{
     font-size: .8vw;
 }
-#preview-side-pane>#head>#content>.drop-down-root>#option{
+#monthOverview-sideBar>#head>#content>.drop-down-root>#option{
     color :#aeb6b9;
     background-color: #1A222B;
     width: 100%;
@@ -46,16 +46,16 @@
     max-height: max-content !important;
 
 }
-#preview-side-pane>#head>#content>.drop-down-root>#option>.clicked{
+#monthOverview-sideBar>#head>#content>.drop-down-root>#option>.clicked{
      background-color: #3e3e4657 !important;
      color: #fff;
 }
-#preview-side-pane>#head>#content>.drop-down-root>#option>span:hover{
+#monthOverview-sideBar>#head>#content>.drop-down-root>#option>span:hover{
     background-color: #3e3e4657;
     color: #fff;
 
 }
-#preview-side-pane>#head>#content>#drop-down>#drop-down-head{
+#monthOverview-sideBar>#head>#content>#drop-down>#drop-down-head{
     display: flex;
     align-items: center;
     position: relative;
@@ -63,22 +63,22 @@
     cursor: pointer;
     padding-left: .5vw;
 }
-#preview-side-pane>#head>#content>#drop-down>#drop-down-head>.material-symbols-outlined{
+#monthOverview-sideBar>#head>#content>#drop-down>#drop-down-head>.material-symbols-outlined{
     position:absolute;
     right: 0;
 }
 
-#preview-side-pane>#head>#content>#drop-down>#option>span{
+#monthOverview-sideBar>#head>#content>#drop-down>#option>span{
 height: 1.5vw;
 display: flex;
 align-items: center;
 cursor: pointer;
 
 }
-#preview-side-pane>#head>#content>#drop-down>#option>span:hover{
+#monthOverview-sideBar>#head>#content>#drop-down>#option>span:hover{
     background-color: #34414f;
 }
-#preview-side-pane>#body{
+#monthOverview-sideBar>#body{
     overflow: scroll;
     scrollbar-width: none;
     height: calc(100% - 2vw);
@@ -86,7 +86,7 @@ cursor: pointer;
     width: 100%;
     overflow-x: hidden;
 }
-#preview-side-pane>#body>#day-container{
+#monthOverview-sideBar>#body>#day-container{
     height: 9vw;
     width: 100%;
     padding: 1vw;
@@ -95,28 +95,92 @@ cursor: pointer;
     transition: .1s ease-in-out;
     position: relative;
 }
-#preview-side-pane>#body>.active{
+#monthOverview-sideBar>#body>.active{
     background-color: #606060de !important;
     transform: scale(1.1);
     transition: .1s ease-in-out;
 }
-#preview-side-pane>#body>.active:hover{
+#monthOverview-sideBar>#body>.active:hover{
    transform: scale(1.1) !important;
 }
-#preview-side-pane>#body>#day-container:hover{
+#monthOverview-sideBar>#body>#day-container:hover{
     background-color: #3e3e46de;
     transform: scale(1.05);
 }
-#preview-side-pane>#body>#day-container>img{
+#monthOverview-sideBar>#body>#day-container>img{
     width: 50%;
     height: 50%;
     position: absolute;
 }
-#preview-side-pane > #head > #content > #drop-down>#option::-webkit-scrollbar-track {
+#monthOverview-sideBar > #head > #content > #drop-down>#option::-webkit-scrollbar-track {
     background-color: yellow !important;
 }
 
-#preview-side-pane > #head > #content > #drop-down>#option::-webkit-scrollbar-thumb {
+#monthOverview-sideBar > #head > #content > #drop-down>#option::-webkit-scrollbar-thumb {
     background-color: #b54545;
     border-radius: 10px;
+}
+#monthOverview-sideBar>#head>#content>#month_dropdown{
+    width: 40%;
+}
+#monthOverview-sideBar>#head>#content>#year_dropdown{
+    width: 45%;
+}
+#monthOverview-sideBar>#head>#content>.drop-down-root:hover{
+    color: #fff;
+    border-radius: 5px;
+}
+#monthOverview-sideBar>#head>#content> div >.drop-down-root>#drop-down-head{
+    width: 100% !important;
+    border: none;
+}
+#monthOverview-sideBar>#head>#content> div >.drop-down-root>#drop-down-head>span{
+    font-size: .8vw;
+}
+#monthOverview-sideBar>#head>#content> div >.drop-down-root>#drop-down-head>.material-symbols-outlined{
+    font-size: 1.2vw;
+}
+#monthOverview-sideBar>#head>#content> div>.drop-down-root>#option>span{
+    font-size: .8vw;
+}
+#monthOverview-sideBar>#head>#content> div >.drop-down-root>#option{
+    color :#aeb6b9;
+    background-color: #1A222B;
+    width: 100%;
+    border-radius: 3px;
+    border-top: none;
+    border-left:none ;
+    max-height: max-content !important;
+
+}
+#monthOverview-sideBar>#head>#content> div >.drop-down-root>#option>.clicked{
+     background-color: #3e3e4657 !important;
+     color: #fff;
+}
+#monthOverview-sideBar>#head>#content> div >.drop-down-root>#option>span:hover{
+    background-color: #3e3e4657;
+    color: #fff;
+
+}
+#monthOverview-sideBar>#head>#content> div >#drop-down>#drop-down-head{
+    display: flex;
+    align-items: center;
+    position: relative;
+    height: 1.5vw;
+    cursor: pointer;
+    padding-left: .5vw;
+}
+#monthOverview-sideBar>#head>#content> div >#drop-down>#drop-down-head>.material-symbols-outlined{
+    position:absolute;
+    right: 0;
+}
+
+#monthOverview-sideBar>#head>#content> div >#drop-down>#option>span{
+height: 1.5vw;
+display: flex;
+align-items: center;
+cursor: pointer;
+}
+#monthOverview-sideBar>#head>#content> div >#drop-down>#option>span:hover{
+    background-color: #34414f;
 }

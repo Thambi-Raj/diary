@@ -1,0 +1,40 @@
+const dropdown_controller={
+    template:
+    ` <dropdown-root
+        :data="data"
+        :format="format"
+        :selected="selected"
+        :fixed_head="fixed_head"
+        @updateDropdownValue="change_drop"
+      >
+     </dropdown-root>`,
+     props:{
+        data:{
+            type:Array
+        },
+        selected:{
+            type:[String,Number]
+        },
+        format:{
+            type:String,
+            default:'Text'
+        },
+        fixed_head:{
+            type:String,
+        },
+        root_ref:{
+            type:[Object,Boolean],
+            default:false
+        },
+        root_event:{
+            type:[Object,Boolean],
+            default:false
+        },
+     },
+     methods:{
+        change_drop(data){
+            this.$emit('change',data);
+        }
+     }
+     
+}

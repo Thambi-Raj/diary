@@ -3,3 +3,17 @@
     height: 100%;
     overflow: auto;
 }
+#side-pane::-webkit-scrollbar {
+    width: .2vw;
+    height: .2vh;
+}
+
+#side-pane::-webkit-scrollbar-track {
+    background: #e8bebeab;
+}
+
+#side-pane::-webkit-scrollbar-thumb {
+    background-color: #d5d2d2;
+    border-radius: 5px;
+
+}

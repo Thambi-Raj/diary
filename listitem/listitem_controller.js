@@ -2,8 +2,9 @@ var listitem_controller = {
     template: `
         <listitem-root 
             :name="name" 
-            :icon_name="prepend_icon"
-            :highlight="active"
+            :prepend_icon="prepend_icon"
+            :active="active"
+            :data_count="data_count"
             @button_clicked="button_clicked">
         </listitem-root>
     `,
@@ -16,6 +17,9 @@ var listitem_controller = {
         },
         active: {
             type: Boolean
+        },
+        data_count:{
+            type:Number
         },
         root_ref: {
             type: Object

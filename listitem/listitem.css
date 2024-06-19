@@ -13,9 +13,23 @@ font-size: 1vw;
 margin-top: 0.1vw;
 }
 .listitem-root>.button:hover {
-    background-color: #54719112;
+    background-color: #f4f9ff12;
 }
 .listitem-root>.active{
-    background-color: #54719112;
+    background-color: #f4f9ff12;
     border-radius: 0px 15px 15px 0px;
+}
+.listitem-root>.button>#name{
+    width: 54%;
+}
+.listitem-root>.button>#count{
+    height: 1.2vw;
+    display: flex;
+    align-items: center;
+    background-color: #9d9d9d47;
+    border-radius: 3px;
+    font-size: .55vw;
+    width: 1.5vw;
+    justify-content: center;
+    color: #d7d7d7;
 }

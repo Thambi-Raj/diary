@@ -19,6 +19,9 @@ const preview_controller = {
             type:[Object,Boolean],
             default:false
         },
+        data:{
+            type:Object
+        },
         date_config:{
             type:Object
         },
@@ -30,17 +33,13 @@ const preview_controller = {
             type:[Object,Boolean],
             default:false
         },
-        data:{
-            type:Object
-        }
     },
-    emits:['add_to_favourite','date_changed'],
     methods: {
         check_available_data(data) {
           if(data){
             return data;
           }
-          return false;
+            return false;
         },
         add_fav(date) {
             this.root_ref && this.root_event.add_to_fav 
@@ -51,6 +50,7 @@ const preview_controller = {
             this.root_ref && this.root_event.click 
                 ? this.root_ref.eventbus[this.root_event.click](data)
                 : this.$emit('date_changed',data);
-        }
+        },
+        
     }
 };

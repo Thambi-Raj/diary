@@ -15,4 +15,7 @@ class Utility{
         var month_number = this.months.indexOf(month);
         return new Date(year, month_number + 1, 0).getDate();
     }
+    monthIndex_to_name(index){
+       return this.months[index];
+    }
 }

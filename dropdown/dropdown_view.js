@@ -1,31 +1,35 @@
-const simple_dropdown_component = {
-    template: `<div class="drop-down-root" v-if="tag !== 'image'">
-    <div id="drop-down-head" @click="show_drop"  ref="dropdown">
-        <span :class="{ 'material-symbols-outlined': tag === 'span' }">{{selected}}</span>
+const dropdown_component = {
+    template: `<div class="drop-down-root" v-if="format !== 'image'">
+    <div id="drop-down-head" @click="switch_dropdown"  ref="dropdown">
+        <span :class="{ 'material-symbols-outlined': format === 'tag' }">{{check_fixed_head()}}</span>
         <span class="material-symbols-outlined">{{dropdown_icon}}</span>
     </div>
     <div id="option" v-if="dropdown_visible">
-        <span v-for="element in data" @click="change_drop(element)" :class="{ 'clicked': element == selected, 'material-symbols-outlined': tag === 'span' }">
+        <span v-for="element in data" @click="updateDropdownValue(element)" :class="{ 'clicked': check_selected(element,selected), 'material-symbols-outlined': format === 'tag' && !fixed_head }">
             {{element}}
         </span>
     </div>
     </div>
     <div class="drop-down-root" v-else>
-        <div id="drop-down-head" @click="show_drop"  ref="dropdown">
+        <div id="drop-down-head" @click="switch_dropdown"  ref="dropdown">
             <img :src="getImageUrl(selected)" class="drop-down-image">
             <span class="material-symbols-outlined">{{dropdown_icon}}</span>
         </div>
         <div id="option" v-if="dropdown_visible" >
-            <div v-for="element in data" :key="element" class="image_dropdown" :class="{ 'clicked': element == selected }" @click="change_drop(element)">
+            <div v-for="element in data" :key="element" class="image_dropdown" :class="{ 'clicked': element == selected }" @click="updateDropdownValue(element)">
                 <img :src="getImageUrl(element)" class="drop-down-image" >
             </div>
         </div>
     </div>`
 ,
+
     props: {
         data: { type: Array },
-        tag: { type: String },
-        selected:{type:[String,Number]}
+        format: { type: String },
+        selected:{type:[String,Number]},
+        fixed_head:{
+            type:String
+        }
     },
     data() {
         return {
@@ -34,21 +38,27 @@ const simple_dropdown_component = {
         }
     },
     methods: {
-        show_drop() {
+        switch_dropdown() {
             this.dropdown_visible = !this.dropdown_visible;
             this.dropdown_icon = this.dropdown_icon=="arrow_drop_up" ?"arrow_drop_down":"arrow_drop_up";
         },
-        change_drop(data) {
+        updateDropdownValue(data) {
             this.dropdown_visible = false;
-            this.$emit('change_dropdown_value', data);
-            
-        },
-        hide_drop() {
-            this.dropdown_visible = false;
-            this.dropdown_icon="arrow_drop_down"
+            this.$emit('updateDropdownValue', data);  
         },
         getImageUrl(image) {
-            return `../${image}`;
+            return image ? `../${image}`: `../${this.select}`;
+        },
+        check_fixed_head(){
+            if(this.fixed_head) {
+                return this.fixed_head 
+            }
+            else{
+                 return this.selected;
+            } 
+        },
+        check_selected(element,selected){
+            return element == selected;
         }
     },
     mounted() {

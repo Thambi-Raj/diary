@@ -3,50 +3,57 @@ const editor_component = {
                 <div id="header"  v-if="preview">
                      <div id="left">
                          <div id="back" title="Back to calendar"  @click="back_to_page">
-                            
                                   <span id="back-icon" class="material-symbols-outlined">
                                          arrow_back
                                   </span>
                          </div>
                         <div id="editor-tool" ref="editor_tool" >
-                                <div :class="{ 'button clicked': active_state.bold, 'button': !active_state.bold }" id="bold" @click="change_text_format('bold')">
+                                <div :class="{ 'button clicked': active_state.bold, 'button': !active_state.bold }" id="bold" @click="change_text_format('bold')" title="bold">
                                 <span class="material-symbols-outlined">format_bold</span>
                             </div>
-                            <div :class="{ 'button clicked': active_state.italic, 'button': !active_state.italic }" id="italic" @click="change_text_format('italic')">
+                            <div :class="{ 'button clicked': active_state.italic, 'button': !active_state.italic }" id="italic" @click="change_text_format('italic')" title="italic">
                                 <span class="material-symbols-outlined">format_italic</span>
                             </div>
-                            <div :class="{ 'button clicked': active_state.underline, 'button': !active_state.underline }" id="underline" @click="change_text_format('underline')">
+                            <div :class="{ 'button clicked': active_state.underline, 'button': !active_state.underline }" id="underline" @click="change_text_format('underline')" title="underline">
                                 <span class="material-symbols-outlined">format_underlined</span>
                             </div>
-                            <div class="file" >
+                            <div class="file" title="insert image">
                                 <input  type="file" id="imag" accept="image/*" @change="insert_photo" ref="image_file" >
                                 <label for="imag" id="upload">Upload&nbsp;&nbsp;<span class="material-symbols-outlined">image</span> </label>
                             </div>
-                            <div class="file">
+                            <div class="file" title="color">
                                 <label for="Color">Color &nbsp;&nbsp;</label>
                                 <input type="color" id="Color" @change="change_text_format($event.target.value, 'forecolor',)" :value="active_state.color" ref="color_input">
                             </div>
-                            <div id="font_size">
-                                <dropdown-controller :selected="active_state['font-size']" :data="font_size"  :tag="'-'"  @change="(val) => change_text_format(val, 'FontSize')" ></dropdown-controller>
+                            <div id="font_size" title="font size">
+                                <dropdown-controller :selected="active_state['font-size']" :data="font_size"    @change="(val) => change_text_format(val, 'FontSize')" ></dropdown-controller>
                             </div>
-                            <div id="font_family">
-                                <dropdown-controller :selected="active_state['font-family']" :data="font_family"  :tag="'-'"  @change="(val) => change_text_format(val, 'FontName')"></dropdown-controller>
+                            <div id="font_family" title="font family">
+                                <dropdown-controller :selected="active_state['font-family']" :data="font_family"    @change="(val) => change_text_format(val, 'FontName')"></dropdown-controller>
                             </div>
-                            <div class="icon_dropdown" >
-                                <dropdown-controller  :selected="active_state['align']" :data="align"  :tag="'span'" @change="change_text_align"></dropdown-controller>
+                            <div class="icon_dropdown" title="alignment">
+                                <dropdown-controller  :selected="active_state['align']" :data="align"  :format="'tag'" @change="change_text_align"></dropdown-controller>
                             </div>
-                            <div class="icon_dropdown">
-                                <dropdown-controller  :selected="back_ground" :data="texture" :tag="'image'" @change="change_background"></dropdown-controller>    
+                            <div class="icon_dropdown" title="background">
+                                <dropdown-controller   :selected="this.active_state['background']" :data="texture" :format="'image'" @change="change_background"></dropdown-controller>    
                             </div>
-                            </div> 
-                                                                                                                       
+                            <div class="icon_dropdown" title="line_height">
+                                <dropdown-controller   
+                                    :selected = "active_state['line_height']" 
+                                    :data="line_height" 
+                                    :format="'tag'"
+                                    fixed_head="format_line_spacing"
+                                ></dropdown-controller>    
+                            </div>
+
+                    </div>                                                                                                    
                 </div>
                 <div id="right"> 
                  <div id="date">
                    <span>{{day}}</span>
                  </div>
                  <div id="month">
-                  <span>{{month}}&nbsp;{{date}} ,&nbsp;{{year}}</span>
+                    <span>{{month}}&nbsp;{{date}} ,&nbsp;{{year}}</span>
                  </div>
                 </div>
               </div>
@@ -62,8 +69,8 @@ const editor_component = {
                         <div id="drag_container" ref="drag" @mousedown="start_drag_event" :class="drag_container_class" v-if="image.length > 0">
                             
                         </div>
-                        <div id="imageContainer" :class="image_container_class" v-if="preview && image.length > 0" ref="image" >
-                            <div v-for="(url, index) in image" :key="index" ref="child_images" @mouseover="image_hover(index)" 
+                        <div id="imageContainer" :class="image_container_class" v-if="preview && images_url.length > 0" ref="image" >
+                            <div v-for="(url, index) in images_url" :key="index" ref="child_images" @mouseover="image_hover(index)" 
                                 @mouseout="image_out(index)"    
                                 @click="open_image_in_fullView($event,url)"
                                 :style="getheight()">
@@ -88,6 +95,7 @@ const editor_component = {
             heading: ["normal", "H1", "H2", "H3"],
             align: ["format_align_left", "format_align_justify", "format_align_right"],
             texture: ["texture1.jpg", "texture6.avif", "texture2.jpg", "texture44.webp", "texture51.jpg","blue.jpg"],
+            line_height:[1,1.1,1.2,1.3,1.4,1.5,1.6,1.7,1.8,1.9,2.0],
             active_state: {
                 'bold': false,
                 'italic': false,
@@ -97,7 +105,8 @@ const editor_component = {
                 'font-family': 'sans-serif',
                 'formatBlock': 'normal',
                 'align': 'format_align_left',
-                'background': '"texture1.jpg"'
+                'background':'"texture1.jpg"',
+                'line_height':1.5
             },
             start_line: {
                 'b': 'bold',
@@ -107,7 +116,7 @@ const editor_component = {
             months:['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'],
             days :["Sun", "Mon", "Tue", "Wed", "Thu", "Fri", "Sat"],
             font_tag_length: -1,
-            images_url: [],
+            images_url: this.image,
             back_ground: '',
             preview_class:'',
             image_container_class:'image_container',
@@ -118,7 +127,6 @@ const editor_component = {
             day:'',
         };
     },
-
     props: {
         data: {
             type: [Object,Boolean]
@@ -151,27 +159,30 @@ const editor_component = {
             type:Object
         }
     },
+
     mounted() {
         this.check_for_draft();
         this.check_for_preview();
-        this.images_url =this.image; 
         this.day =this.days[new Date(this.year,this.months.indexOf(this.month),this.date).getDay()];
+        this.$refs.content.focus();
     },
+
     watch: {
         date(){
-            const contentElement = this.$refs.content;
-            if (contentElement.hasAttribute('style')) {
-                contentElement.removeAttribute('style');
-                this.$refs.image.removeAttribute('style');
-            }
-            this.height='';
-            this.day =this.days[new Date(this.year,this.months.indexOf(this.month),this.date).getDay()];
+                const contentElement = this.$refs.content;
+                if (contentElement.hasAttribute('style')) {
+                    contentElement.removeAttribute('style');
+                    this.$refs.image.removeAttribute('style');
+                }
+                this.height='';
+                this.day =this.days[new Date(this.year,this.months.indexOf(this.month),this.date).getDay()];
+                this.$refs.content.focus();
         },
         data() {
             this.check_for_draft();
         },
-        image() {
-            this.images_url =this.image;
+        image(){
+            this.images_url =[...this.image];
         },
     },
     methods: {
@@ -180,13 +191,7 @@ const editor_component = {
         },
         editor_click_event(e){
             if(this.preview){
-                if (e.srcElement != this.$refs.content) {
-                    this.get_current_element(e.srcElement, e);
-                }
-                else {
-                    var last_child = this.$refs.content.childNodes[this.$refs.content.childNodes.length - 1];
-                    this.traverse_element(last_child, false);
-                }
+                this.update_cursor_position_toolbar();
             }
         },     
         editor_keydown_event(e){
@@ -290,7 +295,9 @@ const editor_component = {
         },
         update_cursor_position_toolbar() {
             var sel = window.getSelection();
+            var back = this.active_state['background'];
             this.reset_Active();
+            this.active_state['background'] = back;
             if (sel.anchorNode.tagName) {
                 this.update_toolbar_button(sel.anchorNode);
             }
@@ -299,6 +306,7 @@ const editor_component = {
                 this.update_toolbar_button(h);
                 h = h.parentElement;
             }
+            this.set_alignment(h);
         },
         start_drag_event() {
             const mousemoveHandler = (e) => {
@@ -316,7 +324,6 @@ const editor_component = {
         },
         minimum_width_imageContainer(result_x, target) {
             background= this.$refs.back_ground.getBoundingClientRect();
-            console.log(target);
             var parent_width = target.clientWidth;
             const content = this.$refs.content;
             const image = this.$refs.image;
@@ -347,32 +354,6 @@ const editor_component = {
             } else {
                 const vwHeight = (height / viewportWidth) * 100;
                 set_content.style.height = vwHeight + "vw";
-            }
-        },
-        get_current_element(element) {
-            if (!(element.getAttribute && element.getAttribute('class') == 'line-content')) {
-                this.check_styles_in_element(element)
-            }
-            else {
-                var sel = window.getSelection();
-                var content_length = sel.anchorOffset;
-                if (content_length <=0) {
-                    this.traverse_element(element, true)
-                }
-                else if (sel.focusNode.parentElement == element) {
-                    this.reset_Active();
-                }
-                else {
-                    this.traverse_element(element, false)
-                }
-            }
-        },
-        check_styles_in_element(element) {
-            var h = element;
-            this.reset_Active();
-            while (h.tagName.toLowerCase() !== 'div') {
-                this.update_toolbar_button(h);
-                h = h.parentElement;
             }
         },
         update_toolbar_button(element) {
@@ -436,12 +417,11 @@ const editor_component = {
                 span.style.fontFamily = attr;
             }
         },
-        traverse_element(element, forward) {
-            var child = element.childNodes[forward ? 0 : element.childNodes.length - 1];
-            this.reset_Active();
-            while (child && child.tagName && child.tagName.toLowerCase() != 'br') {
-                this.update_toolbar_button(child);
-                child = child.childNodes[forward ? 0 : child.childNodes.length - 1];
+        set_alignment(div) {
+            if (div.style.textAlign.length !== 0) {
+                this.active_state['align'] = `format_align_${div.style.textAlign}`;
+            } else {
+                this.active_state['align'] = 'format_align_left';
             }
         },
         change_text_format(format, value) {
@@ -468,6 +448,7 @@ const editor_component = {
               };
                 document.execCommand(alignment[data], false, null);
                 this.active_state['align']= data 
+                this.save_content(this.date);
         },
         fontTag_contents(format, value) {
             this.check_fontfamily_Attribute(format, value);
@@ -546,7 +527,8 @@ const editor_component = {
                 'font-family': 'sans-serif',
                 'formatBlock': 'normal',
                 'align': 'format_align_left',
-                'background': "texture1.jpg"
+                'background': "texture1.jpg",
+                'line_height':1.5
             }
         },
         open_image_in_fullView(e,url) {
@@ -563,17 +545,21 @@ const editor_component = {
             else {
                 this.$refs.back_ground.style.backgroundImage = `url(${"texture1.jpg"})`
                 this.back_ground = "texture1.jpg"
+                this.active_state['background'] = this.back_ground;
             }
+           
         },
         set_background_image_for_editor(props) {
             this.$refs.back_ground.style.backgroundImage = props["background_image"];
             this.back_ground = props["background_image"].replace("url(\"", "");
-            this.back_ground = this.back_ground.replace("\")", "");
+            this.back_ground = this.back_ground.replace("\")", ""); 
+            this.active_state['background'] = this.back_ground;
         },
         change_background(data) {
             this.$refs.back_ground.style.backgroundImage = `url(${data})`;
             this.background = data;
             this.save_content(this.date);
+            this.active_state['background'] = data;
         },
         insert_photo(event) {
             const file = event.target.files[0];

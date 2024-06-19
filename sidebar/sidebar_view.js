@@ -1,43 +1,43 @@
 const sidebar_component = {
     template: `
             <expandable-list-controller
-                v-for="(name, index) in  leftpane_listitem"
-                    :prepend_icon="'clinical_notes'"
-                    :name="name"
-                    :expand="config_details.selected==name"
-                    :items="list_values"
-                    :selected_item="config_details.month"
-                    @changed="expand_list_changed"
+                v-for="(sublist, year) in config.lists"
+                :prepend_icon="'clinical_notes'"
+                :name="year"
+                :isExpand="check_expand(year)"  
+                :sublist="sublist"
+                :selected="isSelected(year)"
+                :data_count="config.data_count[year]"
+                @changed="expand_list_changed"
             ></expandable-list-controller>
             <listitem-controller
-                    :prepend_icon="'favorite'" 
-                    :name="'Favourites'" 
-                    :active="config_details.selected=='favorite'"
-                    @clicked="listitem_clicked"
+                :prepend_icon="'favorite'" 
+                :name="'Favourites'" 
+                :active="config.selected.list === 'favorite'"
+                :data_count="config.data_count['Favourites']"
+                @clicked="listitem_clicked"
             >
             </listitem-controller>
     `,
-    emits:['expand_list_change','listitem_clicked'],
+    emits: ['expand_list_change', 'listitem_clicked'],
     props: {
-        leftpane_listitem:{
-            type:Object,
-        },
-        config_details:{
-            type:Object
-        },
-        list_values:{
-            type:Array
-        },
-        selected_item:{
-            type:String
+        config: {
+            type: Object,
+            required: true
         },
     },
     methods: {
-        expand_list_changed(data){
-            this.$emit('expand_list_change',data);
-       },
-        listitem_clicked(data){
-            this.$emit('listitem_clicked',data);
+        expand_list_changed(data) {
+            this.$emit('expand_list_change', data);
+        },
+        listitem_clicked(data) {
+            this.$emit('listitem_clicked', data);
+        },
+        check_expand(year) {
+            return this.config.selected.list == year 
+        },
+        isSelected(year){
+           return  this.check_expand(year) && this.config.selected.sublist
         }
     }
 };
